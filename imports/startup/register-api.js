@@ -1,18 +1,23 @@
 import {createApolloServer} from 'meteor/apollo'
 import {makeExecutableSchema} from 'graphql-tools'
+import { merge } from "lodash";
 
-const typeDefs = `
-        type Query {
-                hi:String
-        }
+const testSchema = `
+type Query {
+        hi:String
+}
 `
-const resolvers = {
+
+const testResolver = {
     Query:{
         hi(){
-            return "hello world"
+            return 'hi'
         }
     }
 }
+
+const typeDefs = [testSchema]
+const resolvers =   merge(testResolver)
 
 const schema = makeExecutableSchema({
     typeDefs,
@@ -23,6 +28,3 @@ createApolloServer({schema})
 
 console.log('Server Up')
 
-
-
-// asdfds 

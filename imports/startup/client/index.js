@@ -1,7 +1,7 @@
 import React from "react";
 import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
-import App from "../ui/App";
+import App from "../../ui/App";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
