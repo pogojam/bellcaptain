@@ -17,7 +17,9 @@ import React, { Component } from 'react'
 export default class CashCalc extends Component {
     constructor(props) {
         super(props)
-        this.state={}
+        this.state={
+            TotalCash:''
+        }
     }
 
     calcCuts(){
@@ -34,13 +36,29 @@ export default class CashCalc extends Component {
         })
     }
 
+    handleNumChange(e){
+        
+        let val = e.target.value.substring(1)
+        let num = val.substring(0,val.length-3)
+        let dec = val.substring(val.length-2,val.length-1)
+
+
+        let output = `${num},${dec}`
+        this.setState({TotalCash:val})
+        console.log(num)
+    }
+
+    symbol(TC){
+        return `$${TC}`
+    }
+
   render() {
-      const {TotalCuts} = this.state
+      const {TotalCuts,TotalCash} = this.state
       const users = ['Ryan','Alex','Kong','Kevin','Bob']
     return (
       <div>
         <input type="number"  ref={e=>this.TH = e} placeholder='Total Hours' />
-        <input type="number"  ref={e=>this.TC = e} placeholder='Total Cash' />
+        <input  value={this.symbol(TotalCash)} onChange={this.handleNumChange.bind(this)}  ref={e=>this.TC = e} placeholder='Total Cash' />
         <button onClick={this.calcCuts.bind(this)} >Enter</button>
         {TotalCuts?<UserCash TotalCuts={TotalCuts} users={users} handleUserInput={this.handleUserInput.bind(this)} />:null}
       </div>
