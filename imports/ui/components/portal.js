@@ -8,7 +8,11 @@ const Container = styled.div`
     display:grid;
     margin:auto;
     width:30vw;
-    background-color:purple;
+    background-color:aqua;
+    padding: 3em;
+    grid-gap:3em;
+    border:solid black 1px;
+    text-align:center;
 `
 
 
@@ -18,42 +22,48 @@ const getUser = gql`
     }
 `
 
+const Logo = ({path})=>(<img  src={path} alt=""/>)
+
+
 class Portal extends Component {
     constructor(props) {
       super(props)
     
       this.state = {
-         
+         newuser:false
       }
     }
     
     logoutUser(){
-        Accounts.logout()
+        Meteor.logout()
     }
 
     loginUser(email,pass){
-        this.setState({
-            email:email.value,
-            pass:pass.value
-        })
+
+
+        const {redirect} = this.props
+
+        Meteor.loginWithPassword(email.value,pass.value,err=>err?console.log(err):redirect())
     }
 
     signUp(name,email,pass){
-            Accounts.createUser({ username:name.value,email:email.value,password:pass.value },(err)=>console.log(err))
+            Accounts.createUser({email:email.value,password:pass.value },(err)=>err?console.log(err):console.log('Account Created'))
     }
 
-    newUserView(){
-        this.setState({
-            newuser:true
-        })
+    changeview(){
+        this.setState(user=>(
+            {newuser:!user.newuser}
+        ))
     }
 
     render() {
-
+        const {newuser} = this.state
+            console.log(this.props.data.hi)
         return (
-            <Container>
-               {this.state.newuser?<NewUser signUp={this.signUp} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
-               <a  onClick={this.newUserView.bind(this)}> dont have an account?</a>
+            <Container className='animated fadeInUp' >
+                <Logo  path={this.props.logo} />
+               {newuser?<NewUser signUp={this.signUp} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
+               <a  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</a>
             </Container>
         );
     }
@@ -65,11 +75,10 @@ const NewUser = ({signUp})=>{
         pass,
         name
 
-
-    return <form>
-        <input ref={e => email = e } placeholder='name' type="name"/>
+    return <form className='animated flipInY' >
+        <input ref={e => name = e } placeholder='name' type="name"/>
+        <input ref={e => email = e } placeholder='email' type="email"/>
         <input ref={e => pass = e } placeholder='password' type="password"/>
-        <input ref={e => name = e } placeholder='email' type="email"/>
         <button onClick={(e)=>{e.preventDefault(); return signUp(name,email,pass)}} > Sign up</button>
     </form>
 }
@@ -79,12 +88,14 @@ const SignIn = ({loginUser})=>{
     let email,
         pass
 
- return <form>
+ return <form className='animated flipInY'  >
     <input  ref={e=>email = e} placeholder='email' type="email"/>
     <input  ref={e=>pass = e} placeholder='password' type="password" />
     <button onClick={(e)=>{e.preventDefault(); return loginUser(email,pass)}} >Sign In</button>
     </form>
 }
+
+
 
 
 export default graphql(getUser)(Portal);

@@ -10,7 +10,8 @@ type Query {
 
 const testResolver = {
     Query:{
-        hi(){
+        hi(obj,arg,context){
+            console.log(context)
             return 'hi'
         }
     }

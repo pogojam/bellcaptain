@@ -1,3 +1,4 @@
+import styled from "styled-components";
 //  staff 
 //  total hours worked TH
 //  total cash TC
@@ -10,11 +11,9 @@
 // Show Running Cuts ie.. Ryan:8cuts Bob:4cuts  RC= Cuts - Bob+Ryan
 
 
-
-
 import React, { Component } from 'react'
 
-export default class CashCalc extends Component {
+class calculator extends Component {
     constructor(props) {
         super(props)
         this.state={
@@ -24,7 +23,8 @@ export default class CashCalc extends Component {
 
     calcCuts(){
 
-            const cuts =  this.TC.value/this.TH.value
+            let cuts =  this.TC.value/this.TH.value
+                cuts = Math.round(cuts)
             this.setState({
                 TotalCuts:cuts
             })
@@ -37,15 +37,9 @@ export default class CashCalc extends Component {
     }
 
     handleNumChange(e){
-        
-        let val = e.target.value.substring(1)
-        let num = val.substring(0,val.length-3)
-        let dec = val.substring(val.length-2,val.length-1)
-
-
-        let output = `${num},${dec}`
+        let val = this.TC.value
         this.setState({TotalCash:val})
-        console.log(num)
+
     }
 
     symbol(TC){
@@ -56,9 +50,9 @@ export default class CashCalc extends Component {
       const {TotalCuts,TotalCash} = this.state
       const users = ['Ryan','Alex','Kong','Kevin','Bob']
     return (
-      <div>
+      <div className='animated calculator ' >
         <input type="number"  ref={e=>this.TH = e} placeholder='Total Hours' />
-        <input  value={this.symbol(TotalCash)} onChange={this.handleNumChange.bind(this)}  ref={e=>this.TC = e} placeholder='Total Cash' />
+        <input  value={this.state.TotalCash} onChange={this.handleNumChange.bind(this)}  ref={e=>this.TC = e} placeholder='Total Cash' />
         <button onClick={this.calcCuts.bind(this)} >Enter</button>
         {TotalCuts?<UserCash TotalCuts={TotalCuts} users={users} handleUserInput={this.handleUserInput.bind(this)} />:null}
       </div>
@@ -67,7 +61,7 @@ export default class CashCalc extends Component {
 }
 
 const UserCash = ({users,TotalCuts,handleUserInput})=>{
-    return <div>
+    return <div className='animated fadeInUp' >
         <h1>TotalCuts {TotalCuts}</h1>
         {users.map((item,id)=><UserCashInput key={id} name={item} handleUserInput={handleUserInput} />)}
     </div>
@@ -82,3 +76,12 @@ const UserCashInput = ({name,handleUserInput})=>{
         {name} <input ref={e=>cut = e} onChange={e=>handleUserInput(cut.value)} placeholder='Cuts Given' type="number"/>
     </form>
 }
+
+// Styled
+
+const CashCalc = styled(calculator)`
+
+`
+
+
+export default CashCalc 
