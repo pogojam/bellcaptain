@@ -1,4 +1,4 @@
-
+import styled from 'styled-components'
 import React, { Component } from 'react'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -53,8 +53,10 @@ class TimeInput extends Component {
     }
 
   render() {
+
+
     return (
-        <Range
+        <StyledRange
         min={0}
         max={24}
         step={.5}
@@ -66,6 +68,10 @@ class TimeInput extends Component {
   }
 }
 
+const StyledRange = styled(Range)`
+    grid-area:slider;
+    align-self: center;
+    `
 
 export default TimeInput
 

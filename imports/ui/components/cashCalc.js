@@ -94,20 +94,22 @@ class UserCashInput extends Component {
         const handleRadio = this.handleRadio
 
 return <UserStyle >
+        <h3 style={{ gridArea:'name' }} >
         {name} 
-        <CurrencyInput onChange={this.handleCashChange.bind(this)} value={cash}  ref={e=>this.cash = e}  precision={0} prefix='$' ></CurrencyInput>
+        </h3>
+        <CurrencyInput style={{ gridArea:'cash' }} onChange={this.handleCashChange.bind(this)} value={cash}  ref={e=>this.cash = e}  precision={0} prefix='$' ></CurrencyInput>
+        <UserToolTip confirm={this.confirm.bind(this)} tooltip={tooltip} hours={hours} />
         <TimeInput makeUserTooltip={this.makeUserTooltip.bind(this)} />
-        {tooltip && <UserToolTip hours={hours} />}
-        {tooltip && <Confirm confirm={this.confirm.bind(this)} locked={locked} />}
     </UserStyle>
     }
 }
 
 
-const Confirm = ({confirm,locked})=>{
+const Confirm = ({confirm})=>{
     const StyledButton = styled.div`
-
+    grid-area:confirm;
     text-orientation: mixed;
+    align-self:center;
     `
     return <StyledButton >
         <button  onClick={confirm} >    
@@ -119,19 +121,31 @@ const Confirm = ({confirm,locked})=>{
 
 
 
-const UserToolTip = ({hours,cash})=>{
+const UserToolTip = ({hours,tooltip,confirm})=>{
  
     const StyledTooltip = styled.div`
-                padding:1em;
-                grid-column: 2/2;
-                grid-row: 1/4;
+
                 min-width:70px;
+                grid-area: tooltip;
+                display:grid;
+                grid-template:'hours' 'confirm';
+                justify-content:center
+                border-left: 1px solid;
+                
         `
+
+        const StyledHours = styled.div`
+            grid-area:hours;
+        `
+        const StyledNumber = styled.p`
+            width:30px;
+            float:right;
+        `
+
         
    return (<StyledTooltip>
-      <div >
-      Hours Worked <div className='animated fadeIn' > {hours} </div> 
-      </div>
+      <StyledHours > Hours Worked: <StyledNumber className='animated fadeIn' >{hours}</StyledNumber> </StyledHours> 
+      {tooltip && <Confirm  confirm={confirm} />}
     </StyledTooltip>)
 }
 
@@ -141,12 +155,17 @@ const UserToolTip = ({hours,cash})=>{
 const CashCalc = styled(calculator)`
 
 `
-const UserStyle = styled.div`
-    width: 100%;
-    display: grid;
-    text-align: center;
-`
 
+const UserStyle = styled.div`
+        width: 100%;
+        display: grid;
+        text-align: center;
+        grid-template:'name cash tooltip' 
+                        'slider slider tooltip';
+        margin:1em;
+        grid-gap: .5em;
+        max-height: 50px;
+    `
 
 
 export default CashCalc 

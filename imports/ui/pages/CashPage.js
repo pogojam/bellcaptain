@@ -127,6 +127,7 @@ const Page = styled.div `
     width: 100vw;
     display: grid;
     grid-template-rows: 1fr 6fr;
+    grid-template-columns: 1fr;
 }
 `
 
