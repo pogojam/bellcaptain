@@ -1,11 +1,13 @@
 *{
     margin: 0;
+    font-family: 'Marvel', sans-serif;
 }
 .calculator{
     align-self: center;
     justify-self: center;
     background-color: aliceblue;
     padding: 3em;
+    transition: all .2s linear;
 }
 
 #App{

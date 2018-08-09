@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import CurrencyInput from 'react-currency-input';
+import TimeInput from './TimeInput'
+import React, { Component } from 'react'
 //  staff 
 //  total hours worked TH
 //  total cash TC
@@ -11,77 +14,139 @@ import styled from "styled-components";
 // Show Running Cuts ie.. Ryan:8cuts Bob:4cuts  RC= Cuts - Bob+Ryan
 
 
-import React, { Component } from 'react'
+
+
 
 class calculator extends Component {
     constructor(props) {
         super(props)
         this.state={
-            TotalCash:''
+            TotalCash:'',
+            users:[]
         }
     }
 
-    calcCuts(){
 
-            let cuts =  this.TC.value/this.TH.value
-                cuts = Math.round(cuts)
-            this.setState({
-                TotalCuts:cuts
-            })
-    }
 
-    handleUserInput(val){
-        this.setState(prevState=>{
-            return {TotalCuts:prevState.TotalCuts - val}
-        })
-    }
+
 
     handleNumChange(e){
         let val = this.TC.value
         this.setState({TotalCash:val})
-
     }
 
-    symbol(TC){
-        return `$${TC}`
-    }
 
+
+ 
   render() {
       const {TotalCuts,TotalCash} = this.state
       const users = ['Ryan','Alex','Kong','Kevin','Bob']
+      
     return (
       <div className='animated calculator ' >
-        <input type="number"  ref={e=>this.TH = e} placeholder='Total Hours' />
-        <input  value={this.state.TotalCash} onChange={this.handleNumChange.bind(this)}  ref={e=>this.TC = e} placeholder='Total Cash' />
-        <button onClick={this.calcCuts.bind(this)} >Enter</button>
-        {TotalCuts?<UserCash TotalCuts={TotalCuts} users={users} handleUserInput={this.handleUserInput.bind(this)} />:null}
+      {users.map((item,id)=><UserCashInput {...this.props}  key={id} name={item} />)}
       </div>
     )
   }
 }
 
-const UserCash = ({users,TotalCuts,handleUserInput})=>{
-    return <div className='animated fadeInUp' >
-        <h1>TotalCuts {TotalCuts}</h1>
-        {users.map((item,id)=><UserCashInput key={id} name={item} handleUserInput={handleUserInput} />)}
-    </div>
+class UserCashInput extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            cash:0,
+            locked:false
+        }
+    }
+
+    makeUserTooltip(e){
+        let hours = e[1]-e[0]
+        let time = [e[0],e[1]]
+        this.setState({
+            hours:hours,
+            time:time,
+            tooltip:true
+        })
+    }
+
+    handleCashChange(){
+        this.setState({
+            cash:this.cash.state.value
+        })
+    }
+    
+    confirm(){
+
+        const {time,cash,locked} = this.state
+        const {name} = this.props
+        this.setState({
+            locked:true
+        })
+
+        let data = [{time,name,cash}]
+        this.props.handleCashData(data)
+    }
+
+
+    render(){
+        const {name}= this.props
+        const {hours,time,cash,tooltip,locked} = this.state
+        const handleRadio = this.handleRadio
+
+return <UserStyle >
+        {name} 
+        <CurrencyInput onChange={this.handleCashChange.bind(this)} value={cash}  ref={e=>this.cash = e}  precision={0} prefix='$' ></CurrencyInput>
+        <TimeInput makeUserTooltip={this.makeUserTooltip.bind(this)} />
+        {tooltip && <UserToolTip hours={hours} />}
+        {tooltip && <Confirm confirm={this.confirm.bind(this)} locked={locked} />}
+    </UserStyle>
+    }
 }
 
 
-const UserCashInput = ({name,handleUserInput})=>{
+const Confirm = ({confirm,locked})=>{
+    const StyledButton = styled.div`
 
-    let cut
-
-    return <form action="">
-        {name} <input ref={e=>cut = e} onChange={e=>handleUserInput(cut.value)} placeholder='Cuts Given' type="number"/>
-    </form>
+    text-orientation: mixed;
+    `
+    return <StyledButton >
+        <button  onClick={confirm} >    
+        confirm
+        </button>
+    </StyledButton>
 }
+
+
+
+
+const UserToolTip = ({hours,cash})=>{
+ 
+    const StyledTooltip = styled.div`
+                padding:1em;
+                grid-column: 2/2;
+                grid-row: 1/4;
+                min-width:70px;
+        `
+        
+   return (<StyledTooltip>
+      <div >
+      Hours Worked <div className='animated fadeIn' > {hours} </div> 
+      </div>
+    </StyledTooltip>)
+}
+
 
 // Styled
 
 const CashCalc = styled(calculator)`
 
 `
+const UserStyle = styled.div`
+    width: 100%;
+    display: grid;
+    text-align: center;
+`
+
 
 
 export default CashCalc 
