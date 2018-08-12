@@ -14,6 +14,12 @@ const Container = styled.div`
     border:solid black 1px;
     text-align:center;
 `
+const Button = styled.p`
+       transition:all .7s;
+    &:hover{
+        transform:scale(1.2);
+    }
+`
 
 
 const getUser = gql`
@@ -46,7 +52,7 @@ class Portal extends Component {
         Meteor.loginWithPassword(email.value,pass.value,err=>err?console.log(err):redirect())
     }
 
-    signUp(name,email,pass){
+    signUp(name,email,pass,phone){
             Accounts.createUser({email:email.value,password:pass.value },(err)=>err?console.log(err):console.log('Account Created'))
     }
 
@@ -57,13 +63,13 @@ class Portal extends Component {
     }
 
     render() {
+        console.log(Accounts.users);
         const {newuser} = this.state
-            console.log(this.props.data.hi)
         return (
             <Container className='animated fadeInUp' >
                 <Logo  path={this.props.logo} />
                {newuser?<NewUser signUp={this.signUp} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
-               <a  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</a>
+               <Button  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</Button>
             </Container>
         );
     }
@@ -73,13 +79,15 @@ class Portal extends Component {
 const NewUser = ({signUp})=>{
     let email,
         pass,
-        name
+        name,
+        phone
 
     return <form className='animated flipInY' >
         <input ref={e => name = e } placeholder='name' type="name"/>
         <input ref={e => email = e } placeholder='email' type="email"/>
         <input ref={e => pass = e } placeholder='password' type="password"/>
-        <button onClick={(e)=>{e.preventDefault(); return signUp(name,email,pass)}} > Sign up</button>
+        <input  ref={e => phone = e } placeholder='phone number' type="phonenumber" />
+        <button onClick={(e)=>{e.preventDefault(); return signUp(name,email,pass,phone)}} > Sign up</button>
     </form>
 }
 

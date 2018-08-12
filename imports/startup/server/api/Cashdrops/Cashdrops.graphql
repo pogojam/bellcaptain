@@ -1,0 +1,13 @@
+
+
+type Cashdrops {
+    _id:String!
+    userIDs:[Int]
+    amSplit:Int
+    pmSplit:Int
+    totalDrop:Int
+}
+
+type Mutation{
+    createCashdrop:Cashdrops
+}

@@ -13,8 +13,8 @@ import {ApolloLink,from} from 'apollo-link'
 
 const authLink = new ApolloLink((operation,forward) =>{
   const token = Accounts._storedLoginToken
-  operation.setContext(()=>({
-    headers:{
+  operation.setContext((prevContext)=>({
+    header:{
       "meteor-login-token":token
     }
   }))

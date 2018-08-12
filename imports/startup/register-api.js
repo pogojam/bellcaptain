@@ -1,6 +1,8 @@
 import {createApolloServer} from 'meteor/apollo'
 import {makeExecutableSchema} from 'graphql-tools'
 import { merge } from "lodash";
+import CashdropsSchema from "./server/api/Cashdrops/Cashdrops.graphql";
+import CashdropResolver from './server/api/Cashdrops/resolvers'
 
 const testSchema = `
 type Query {
@@ -8,17 +10,14 @@ type Query {
 }
 `
 
-const testResolver = {
+const testResolver = { 
     Query:{
-        hi(obj,arg,context){
-            console.log(context)
-            return 'hi'
-        }
+        hi(){return 'hi'}
     }
 }
 
-const typeDefs = [testSchema]
-const resolvers =   merge(testResolver)
+const typeDefs = [testSchema,CashdropsSchema]
+const resolvers =   merge(testResolver,CashdropResolver)
 
 const schema = makeExecutableSchema({
     typeDefs,

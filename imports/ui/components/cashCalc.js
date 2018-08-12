@@ -144,7 +144,7 @@ const UserToolTip = ({hours,tooltip,confirm})=>{
 
         
    return (<StyledTooltip>
-      <StyledHours > Hours Worked: <StyledNumber className='animated fadeIn' >{hours}</StyledNumber> </StyledHours> 
+      <StyledHours  className='animated fadeIn' > Hours Worked: <StyledNumber className='animated fadeIn' >{hours}</StyledNumber> </StyledHours> 
       {tooltip && <Confirm  confirm={confirm} />}
     </StyledTooltip>)
 }

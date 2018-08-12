@@ -1,8 +1,21 @@
 import React, {Component} from 'react'
 import CashCalc from "../components/cashCalc";
 import styled from "styled-components";
+import gql from 'graphql-tag'
+import {graphql} from 'react-apollo'
 
-export default class CashPage extends Component {
+const dropCash = gql`
+    mutation createCashdrop {
+      createCashdrop{
+        _id
+      }
+    }
+`
+
+
+
+
+class CashPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,10 +48,11 @@ export default class CashPage extends Component {
       }
 
     })
-
+  this.props.createCashDrop();
   }
 
   render() {
+
 
     // Calc Totals
 
@@ -137,3 +151,6 @@ const Header = styled.div `
       grid-column: 1/3;
       
 `
+
+
+export default graphql(dropCash,{name:'createCashDrop'})(CashPage)
