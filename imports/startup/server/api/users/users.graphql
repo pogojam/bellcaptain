@@ -1,0 +1,11 @@
+type User {
+    _id:String
+    name:String
+    email:String
+    phone:Int
+}
+
+
+type AddUser{
+    AddUser:User
+}

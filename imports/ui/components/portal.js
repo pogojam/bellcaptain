@@ -22,10 +22,13 @@ const Button = styled.p`
 `
 
 
-const getUser = gql`
-    {
-        hi
-    }
+const AddUser = gql`
+       mutation AddUser {
+           AddUser {
+               _id
+           }
+       }
+    
 `
 
 const Logo = ({path})=>(<img  src={path} alt=""/>)
@@ -53,6 +56,7 @@ class Portal extends Component {
     }
 
     signUp(name,email,pass,phone){
+            this.props.AddUser()
             Accounts.createUser({email:email.value,password:pass.value },(err)=>err?console.log(err):console.log('Account Created'))
     }
 
@@ -63,7 +67,6 @@ class Portal extends Component {
     }
 
     render() {
-        console.log(Accounts.users);
         const {newuser} = this.state
         return (
             <Container className='animated fadeInUp' >
@@ -106,4 +109,4 @@ const SignIn = ({loginUser})=>{
 
 
 
-export default graphql(getUser)(Portal);
+export default graphql(AddUser,{name:'AddUser'})(Portal);
