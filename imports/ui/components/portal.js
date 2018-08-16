@@ -21,14 +21,12 @@ const Button = styled.p`
     }
 `
 
-
 const AddUser = gql`
-       mutation AddUser {
-           AddUser {
-               _id
-           }
-       }
-    
+    mutation AddUser($name:String!,$email:String,$phone:ID){
+        AddUser(name:$name,email:$email,phone:$phone){
+            _id
+        }
+    }
 `
 
 const Logo = ({path})=>(<img  src={path} alt=""/>)
@@ -56,8 +54,11 @@ class Portal extends Component {
     }
 
     signUp(name,email,pass,phone){
-            this.props.AddUser()
-            Accounts.createUser({email:email.value,password:pass.value },(err)=>err?console.log(err):console.log('Account Created'))
+
+            Accounts.createUser({email:email.value,password:pass.value,profile:{name:name.value,phone:phone.value} },(err)=>{
+                err?console.log(err):console.log('Account Created')
+                this.props.redirect()                
+            })
     }
 
     changeview(){
@@ -67,11 +68,12 @@ class Portal extends Component {
     }
 
     render() {
+        console.log(Accounts.users );
         const {newuser} = this.state
         return (
             <Container className='animated fadeInUp' >
                 <Logo  path={this.props.logo} />
-               {newuser?<NewUser signUp={this.signUp} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
+               {newuser?<NewUser signUp={this.signUp.bind(this)} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
                <Button  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</Button>
             </Container>
         );
@@ -109,4 +111,4 @@ const SignIn = ({loginUser})=>{
 
 
 
-export default graphql(AddUser,{name:'AddUser'})(Portal);
+export default graphql( AddUser,{name:'AddUser'})(Portal);

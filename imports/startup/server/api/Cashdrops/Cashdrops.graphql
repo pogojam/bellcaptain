@@ -1,13 +1,13 @@
 
 
-type Cashdrops {
-    _id:String!
-    userIDs:[Int]
-    amSplit:Int
-    pmSplit:Int
+type userdrop {
+    name:String
+    amDrop:Int
+    pmDrop:Int
     totalDrop:Int
+    # id:ID
 }
 
-type Mutation{
-    createCashdrop:Cashdrops
+extend type Mutation {
+    createCashdrop(totalDrop:Int,amDrop:Int,pmDrop:Int,shiftStart:Int,shiftEnd:Int,userDrop:Int,id:ID,name:String):userdrop
 }

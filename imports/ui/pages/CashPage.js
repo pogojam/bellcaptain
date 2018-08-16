@@ -5,15 +5,12 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 
 const dropCash = gql`
-    mutation createCashdrop {
-      createCashdrop{
-        _id
+    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Int,$shiftEnd:Int,$userDrop:Int,$name:String) {
+      createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name){
+        name
       }
     }
 `
-
-
-
 
 class CashPage extends Component {
   constructor(props) {
@@ -47,40 +44,68 @@ class CashPage extends Component {
         return {data: userData}
       }
 
-    })
-  this.props.createCashDrop();
+    },()=>this.calcTotals())
+    
   }
 
-  render() {
+  handleCashDrop(){
+    console.log('drop');
+    const {totalDrop,totalAM,totalPM} = this.state
 
+    this.state.data.map(user=>{
+      this.props.dropCash(
+        {variables:{
+          totalDrop:totalDrop,
+          amDrop:totalAM,
+          pmDrop:totalPM,
+          userDrop:user.cash,
+          shiftStart:user.time[0],
+          shiftEnd:user.time[1],
+          name:user.name
+        }}
+      )
+    })
 
-    // Calc Totals
+  }
+
+  calcTotals(){
 
     let totalCash = 0,
     totalAM = 0,
     totalPM = 0
 
     this.state
-      .data
-      .forEach(user => {
+    .data
+    .forEach(user => {
 
-        totalCash = user.cash + totalCash
-// Determine if user is AM shift or PM shift
+      totalCash = user.cash + totalCash
 
-        let timeAverage = (user.time[0] + user.time[1])/2
+// Determine if user adds to AM shift or PM shift
 
-        if(timeAverage<=13){
-             totalAM += user.cash
-        }
-        if(timeAverage>=17){
-           totalPM += user.cash
-        }
- 
-      })
+      let timeAverage = (user.time[0] + user.time[1])/2
 
+      if(timeAverage<=13){
+           totalAM += user.cash
+      }
+      if(timeAverage>=17){
+         totalPM += user.cash
+      }
 
+    })
 
+    console.log(this.state.data);
 
+    this.setState({
+      totalCash:totalCash,
+      totalAM:totalAM,
+      totalPM:totalPM
+    })
+
+  }
+
+  render() {
+    //  Totals
+    const {totalCash,totalAM,totalPM}=this.state
 
     return (
       <Page>
@@ -89,6 +114,7 @@ class CashPage extends Component {
           handleCashData={this
           .handleCashData
           .bind(this)}
+          handleCashDrop={this.handleCashDrop.bind(this)}
           {...this.props}/>
         <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}/>
       </Page>
@@ -153,4 +179,4 @@ const Header = styled.div `
 `
 
 
-export default graphql(dropCash,{name:'createCashDrop'})(CashPage)
+export default graphql(dropCash,{name:'dropCash'})(CashPage)

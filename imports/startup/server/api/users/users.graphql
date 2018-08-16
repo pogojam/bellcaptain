@@ -1,11 +1,10 @@
-type User {
+type User{
     _id:String
-    name:String
-    email:String
-    phone:Int
+    emails:[String]
+    profile:profile
 }
 
-
-type AddUser{
-    AddUser:User
+type profile{
+    name:String
+    phone:ID
 }

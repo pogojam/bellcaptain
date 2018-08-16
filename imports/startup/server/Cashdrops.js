@@ -1,6 +1,7 @@
-import Mongo from 'metero/mongo'
+import {Mongo} from 'meteor/mongo'
 
-const Cashdrops = Mongo.Collection('Cashdrops')
+
+const Cashdrops = new Mongo.Collection('Cashdrops')
 
 export default Cashdrops
 

@@ -6,20 +6,24 @@ import CashdropResolver from './server/api/Cashdrops/resolvers'
 import UserSchema from './server/api/users/users.graphql'
 import UserResolver from './server/api/users/resolvers'
 
-const testSchema = `
+const Schema = `
 type Query {
         hi:String
+        users:[User]
+},
+type Mutation{
+    AddUser(name:String!,email:String,phone:ID):User
 }
 `
 
-const testResolver = { 
+const Resolver = { 
     Query:{
         hi(){return 'hi'}
     }
 }
 
-const typeDefs = [testSchema,CashdropsSchema,UserSchema]
-const resolvers =   merge(testResolver,CashdropResolver,UserResolver)
+const typeDefs = [Schema,CashdropsSchema,UserSchema]
+const resolvers =   merge(Resolver,CashdropResolver,UserResolver)
 
 const schema = makeExecutableSchema({
     typeDefs,
