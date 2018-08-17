@@ -20,9 +20,7 @@ const GetUsers = gql`
 {
   users{
     _id
-		profile{
-      name
-    }
+		name
   }
 }
 `;
@@ -49,7 +47,7 @@ class calculator extends Component {
       return (
         <div className="animated calculator ">
           {users.map((user) => (
-            <UserCashInput {...this.props} key={user._id} name={user.profile.name} />
+            <UserCashInput {...this.props} key={user._id} name={user.name} />
           ))}
         </div>
       );

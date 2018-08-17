@@ -16,3 +16,14 @@
     align-content: center;
     background-color: dimgray
 }
+
+
+.fadeIn {
+    opacity: 0;
+    z-index: 1;
+  }
+  
+  .fadeOut {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+  }

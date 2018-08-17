@@ -5,9 +5,13 @@ type userdrop {
     amDrop:Int
     pmDrop:Int
     totalDrop:Int
-    # id:ID
+    id:ID
 }
 
-extend type Mutation {
+ type Query {
+    userDrop:userdrop
+}
+
+ type Mutation {
     createCashdrop(totalDrop:Int,amDrop:Int,pmDrop:Int,shiftStart:Float,shiftEnd:Float,userDrop:Int,id:ID,name:String):userdrop
 }

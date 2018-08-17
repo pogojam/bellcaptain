@@ -6,6 +6,8 @@ import CashPage from "./pages/CashPage";
 import DashPage from "./pages/DashPage";
 import Home from "./pages/index";
 import React, { Component } from 'react';
+import LocationContext from './components/LocationContext'
+
 
 const animations = {
     enter:'fadeIn',
@@ -17,7 +19,7 @@ class App extends Component {
         return (
             <Route render={({location})=>(
             <TransitionGroup>
-                <CSSTransition timeout={600} classNames={animations} key={location.key} >
+                <CSSTransition classNames={animations} timeout={250} key={location.key} >
                 <Switch location={location}   >
                         <Route exact path='/' children={({match,...rest})=>(match&&<Home {...rest} /> )} />
                         <Route exact path='/Cash' children={({match,...rest})=>(match&& <CashPage {...rest} /> )} />

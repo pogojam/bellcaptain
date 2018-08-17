@@ -6,12 +6,10 @@ extend type Query {
 
 type User{
     _id:String
-    emails:[String]
-    profile:profile
-    loggedIn:Boolean
-}
+    email:String
 
-type profile{
+    loggedIn:Boolean
     name:String
     phone:ID
 }
+

@@ -22,3 +22,4 @@ apollo
 swydo:graphql
 accounts-base
 accounts-password@1.5.1
+momentjs:moment

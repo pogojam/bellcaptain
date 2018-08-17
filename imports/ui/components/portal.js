@@ -77,7 +77,7 @@ class Portal extends Component {
         console.log(Accounts.users );
         const {newuser,err} = this.state
         return (
-            <Container className='animated fadeInUp' >
+            <Container >
                 <Logo  path={this.props.logo} />
                {newuser?<NewUser signUp={this.signUp.bind(this)} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
                {err&&<p style={{ color:'red' }} >{err.reason}</p>}
@@ -111,7 +111,7 @@ const SignIn = ({loginUser})=>{
  return <form style={{display:'grid'}} className='animated flipInY'  >
     <input  ref={e=>email = e} placeholder='email' type="email"/>
     <input  ref={e=>pass = e} placeholder='password' type="password" />
-    <button onClick={(e)=>{e.preventDefault(); return loginUser(email,pass)}} >Sign In</button>
+    <button  onClick={(e)=>{e.preventDefault(); return loginUser(email,pass)}} >Sign In</button>
     </form>
 }
 

@@ -5,13 +5,13 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import Nav from "../components/nav";
 import ReactEcharts from 'echarts-for-react';
-
+import milToStandard from '../tools/milToStandard'
 
 
 const dropCash = gql`
     mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String) {
       createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name){
-        name
+        amDrop
       }
     }
 `
@@ -56,9 +56,13 @@ class CashPage extends Component {
   }
 
   handleCashDrop(){
-    console.log('drop');
     const {totalDrop,totalAM,totalPM} = this.state
 
+    var date = new Date()
+    var begun = moment(date).format("MM.DD.YYYY");
+    
+                console.log(begun)
+                
     this.state.data.map(user=>{
       this.props.dropCash(
         {variables:{
@@ -100,8 +104,6 @@ class CashPage extends Component {
 
     })
 
-    console.log(this.state.data);
-
     this.setState({
       totalCash:totalCash,
       totalAM:totalAM,
@@ -113,11 +115,10 @@ class CashPage extends Component {
   render() {
     //  Totals
     const {totalCash,totalAM,totalPM}=this.state
-
     return (
       <Page>
         <Header>
-          <Nav> </Nav>
+          <Nav history={this.props.history} > </Nav>
         </Header>
         <CashCalc
           handleCashData={this
@@ -140,7 +141,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
                 text-align: center;
                 `
   const StyledInfo = styled.div `
-  
+      align-self: center;
   `
   const StyledTotals = styled.div `
       margin:1em;
@@ -209,6 +210,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
     ]
 }
 
+
   // Content
   return (
     <StyledTooltip >
@@ -219,12 +221,12 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
       </StyledTotals>
 
       {data.map((user, id) => (
-        <StyledInfo key={id}>
+        <StyledInfo className="animated fadeIn" key={id}>
           {user.name}
           <br/>
-          ${user.cash}
+          drop ${user.cash}
           <br/>
-          from {user.time[0]} to {user.time[1]}
+          {milToStandard(user.time[0])} to {milToStandard(user.time[1])}
         </StyledInfo>
       ))}
     <button style={{ minHeight:'20vh' }} onClick={()=>handleCashDrop()} >Drop Cash</button>

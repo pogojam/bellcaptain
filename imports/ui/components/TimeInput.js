@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import React, { Component } from 'react'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import milToStandard from '../tools/milToStandard'
 
 const ToolTip = Slider.createSliderWithTooltip;
 
@@ -18,33 +19,6 @@ let time = 0
 let hours = 0
 let minutes = 0
 let ampm = 'am'
-
-const milToStandard = (mil)=>{
-
-    let hour = Math.floor(mil)
-    let min = (((mil - hour)/.25)*.15)
-        min= min.toFixed(2)*100
-
-
-    let time
-
-    if(hour<12){
-        time = hour+':'+min+'am'
-    }
-    if(hour===12){
-        time=12+':'+min+'pm'
-    }
-    if(hour>12){
-        time = (hour-12)+':'+min+'pm'
-    }
-    if(hour===24){
-        time = 12+':'+min+'am'
-    }
-
-    return time
-}
-
-console.log(milToStandard(13.5));
 
 
 class TimeInput extends Component {

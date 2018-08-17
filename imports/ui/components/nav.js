@@ -13,7 +13,6 @@ const Container = styled.div`
 const Nav = ({history})=>{
 
     const location = history.location.pathname
-
     return <Container>
     <button onClick={()=>{ Accounts.logout(),history.push('/')  }} >Logout</button>
     <button>Schedule</button>
@@ -23,4 +22,4 @@ const Nav = ({history})=>{
     </Container>
 }
 
-export default withRouter(Nav);
+export default Nav;

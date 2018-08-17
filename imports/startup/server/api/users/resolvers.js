@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 
 // Logging for maping user objectdd
 
-const USERS = Meteor.users.find().fetch({})
+
 
 console.log(Accounts);
 
@@ -14,18 +14,22 @@ export default {
             return user
         },    
         users(obj,arg,{userId}){
+
                 return Meteor.users.find().fetch({})
         }
     },
     User:{
-        loggedIn(user){
-            return user._id?true:false
+        loggedIn(obj,arg,{user}){
+            return obj._id===user._id?true:false
+        },
+        email(obj,arg,{user}){
+            return obj.emails[0].address
+        },
+        name(obj,arg,{user}){
+            return obj.profile.name
+        },
+        phone(obj,arg,{user}){
+            return user.profile.phoen
         }
-    },
-    Mutation:{
-        AddUser(obj,{name,email,phone},context){
-        const userId = Users.insert({name,email,phone})
-        return Users.findOne(userId)
     }
-}
 }

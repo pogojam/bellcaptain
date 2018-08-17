@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import Nav from "../components/nav";
 import styled from '../../../node_modules/styled-components';
 import ReactEcharts from 'echarts-for-react';
+import {  graphql } from 'react-apollo'
+import gql from '../../../node_modules/graphql-tag';
+
+const GetUser = gql`
+    {
+        user{
+            _id
+            email
+            name
+            phone
+        }
+    }
+`
 
 const Container = styled.div`
     display: grid;
@@ -15,8 +28,9 @@ class DashPage extends Component {
     render() {
         return (
             <Container>
-                <Nav/>
-                <Content/>
+                <Nav history={this.props.history} />
+
+                {!this.props.data.loading &&<Content {...this.props.data} />}
             </Container>
         );
     }
@@ -41,23 +55,55 @@ const chartOptions = {
 
 
 
-const Content = ()=>{
-
-
+const Content = ({user})=>{
+    console.log(user)
     const StyledContent =  styled.div`
         display:grid;
-`
-
-const StyledChart =  styled.div`
-
-`
+        grid-template:  'pic overview overview' 20% 
+                        'charts charts charts'; 
+        
+        `
 
 return <StyledContent>
-    <StyledChart id="CashChart"></StyledChart>
-        <ReactEcharts option={chartOptions} />
-</StyledContent>
+    <ProfilePic/>
+    <Overview {...user} />
+    <Charts/>
+    </StyledContent>
+}
+
+const Overview = ({email,name})=>{
+    const StyledOverview=styled.div`
+    grid-area: overview;
+    border-left: 1px solid;
+    border-bottom: 1px solid;
+    padding: 2em;
+    display: grid;
+    align-content: center;
+    `
+    return <StyledOverview>
+
+        <p>email: {email}</p>
+        <p>name:{name}</p>
+
+
+    </StyledOverview>
+
+}
+
+const ProfilePic = ()=>{
+    const Pic = styled.img`
+    `
+
+    return <div style={{gridArea:'pic'}} >
+        <Pic/>
+    </div>
+}
+
+const Charts = ()=>{
+    return <div style={{gridArea:'charts'}} >
+    <ReactEcharts option={chartOptions} />
+    </div>
 }
 
 
-
-export default DashPage;
+export default graphql(GetUser)(DashPage);
