@@ -3,9 +3,13 @@ import CashCalc from "../components/cashCalc";
 import styled from "styled-components";
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
+import Nav from "../components/nav";
+import ReactEcharts from 'echarts-for-react';
+
+
 
 const dropCash = gql`
-    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Int,$shiftEnd:Int,$userDrop:Int,$name:String) {
+    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String) {
       createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name){
         name
       }
@@ -16,7 +20,10 @@ class CashPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: []
+      data: [],
+      totalAM:0,
+      totalPM:0,
+      totalCash:0
     }
   }
 
@@ -109,20 +116,22 @@ class CashPage extends Component {
 
     return (
       <Page>
-        <Header></Header>
+        <Header>
+          <Nav> </Nav>
+        </Header>
         <CashCalc
           handleCashData={this
           .handleCashData
           .bind(this)}
           handleCashDrop={this.handleCashDrop.bind(this)}
           {...this.props}/>
-        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}/>
+        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data} handleCashDrop={this.handleCashDrop.bind(this)} />
       </Page>
     )
   }
 }
 
-const UserTooltip = ({totalAM,totalPM,data, totalCash}) => {
+const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
 
   // Styles
 
@@ -135,17 +144,78 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash}) => {
   `
   const StyledTotals = styled.div `
       margin:1em;
+      min-width: 15vw;
   `
+  const totalsChartOptios = {
+  
+    legend: {
+        orient: 'vertical',
+        x: 'center',
+        y:'top',
+        data:[`AM $${totalAM}`,`PM $${totalPM}`,`Total $${totalCash}`]
+    },
+    series: [
+      {
+        type:'pie',
+        radius: [0, '30%'],
+
+        label: {
+            normal: {
+                position: 'center',
+                show:false
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                  fontSize: '10',
+                  fontWeight: 'bold',
+                  color:'black'
+              }
+          }
+        }, 
+        labelLine: {
+            normal: {
+                show: false
+            }
+        },
+        data:[
+            {value:totalCash, name:`Total $${totalCash}`},
+        ]
+    },
+        {
+            name:'Shift Totals',
+            type:'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '10',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+          
+            data:[
+                {value:totalAM, name:`AM $${totalAM}`},
+                {value:totalPM, name:`PM $${totalPM}`}
+            ]
+        }
+    ]
+}
 
   // Content
   return (
     <StyledTooltip >
 
       <StyledTotals>
-          <h2>Shift Totals</h2>
-      Drop: ${totalCash} <br/>
-      AM Shift: ${totalAM} <br/>
-      PM Shift: ${totalPM} <br/>
+   
+      <ReactEcharts style={{ width:'100%' }} option={totalsChartOptios} />
       </StyledTotals>
 
       {data.map((user, id) => (
@@ -157,6 +227,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash}) => {
           from {user.time[0]} to {user.time[1]}
         </StyledInfo>
       ))}
+    <button style={{ minHeight:'20vh' }} onClick={()=>handleCashDrop()} >Drop Cash</button>
     </StyledTooltip>
   )
 

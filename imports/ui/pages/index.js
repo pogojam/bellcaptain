@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Portal from "../components/portal";
 import styled from 'styled-components'
-
+import withAuthentication from "../components/withAuthentication";
 
 class Home extends Component {
 
@@ -10,15 +10,28 @@ class Home extends Component {
     }
 
     redirect(){
-            this.props.history.push('/Cash')
+            this.props.history.push('/Dash')
     }
     render() {
+        const {user} = this.props
+
         return (
             <div className='animated'>
-                    <Portal  logo='https://image.flaticon.com/icons/svg/87/87746.svg' redirect={this.redirect.bind(this)} />
+                    {user?<Welcome/>:<Portal  logo='https://image.flaticon.com/icons/svg/87/87746.svg' redirect={this.redirect.bind(this)} />}
             </div>
         );
     }
 }
 
-export default Home;
+
+const Welcome = ()=>(
+    <Container>
+    <h1>Welcome back</h1>
+    </Container>
+)
+
+const Container = styled.div`
+display:grid
+`
+
+export default withAuthentication()(Home);

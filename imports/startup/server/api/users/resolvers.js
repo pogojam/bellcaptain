@@ -1,19 +1,25 @@
-import Users from '../users'
-
 import { Meteor } from 'meteor/meteor'
 
 // Logging for maping user objectdd
 
 const USERS = Meteor.users.find().fetch({})
 
-console.log(USERS);
-
+console.log(Accounts);
 
 export default {
 
     Query:{
+        user(obj,arg,{user}){
+
+            return user
+        },    
         users(obj,arg,{userId}){
                 return Meteor.users.find().fetch({})
+        }
+    },
+    User:{
+        loggedIn(user){
+            return user._id?true:false
         }
     },
     Mutation:{

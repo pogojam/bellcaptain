@@ -9,7 +9,7 @@ import UserResolver from './server/api/users/resolvers'
 const Schema = `
 type Query {
         hi:String
-        users:[User]
+        
 },
 type Mutation{
     AddUser(name:String!,email:String,phone:ID):User

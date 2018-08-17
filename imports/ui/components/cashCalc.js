@@ -51,7 +51,6 @@ class calculator extends Component {
           {users.map((user) => (
             <UserCashInput {...this.props} key={user._id} name={user.profile.name} />
           ))}
-          <button onClick={()=>this.props.handleCashDrop()} >Drop Cash</button>
         </div>
       );
     }
@@ -142,8 +141,7 @@ const UserToolTip = ({ hours, tooltip, confirm }) => {
                 display:grid;
                 grid-template:'hours' 'confirm';
                 justify-content:center
-                border-left: 1px solid;
-                
+              
         `;
 
   const StyledHours = styled.div`
@@ -156,7 +154,7 @@ const UserToolTip = ({ hours, tooltip, confirm }) => {
 
   return (
     <StyledTooltip>
-      <StyledHours className="animated fadeIn">
+      <StyledHours className="">
         {" "}
         Hours Worked:{" "}
         <StyledNumber className="animated fadeIn">{hours}</StyledNumber>{" "}

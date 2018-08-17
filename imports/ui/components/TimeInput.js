@@ -19,23 +19,32 @@ let hours = 0
 let minutes = 0
 let ampm = 'am'
 
+const milToStandard = (mil)=>{
 
-for(let i = 0 ; i < day ; i = i+.5 ){
+    let hour = Math.floor(mil)
+    let min = (((mil - hour)/.25)*.15)
+        min= min.toFixed(2)*100
 
-    time = time + 30    
-    hours = time/60 
-    hours = Math.floor(hours)
 
-    minutes = time - hours*60
+    let time
 
-    i<=11 ? ampm = 'am' : ampm = 'pm';
-
-    if(hours === 24 ){
-        ampm = 'am'
+    if(hour<12){
+        time = hour+':'+min+'am'
+    }
+    if(hour===12){
+        time=12+':'+min+'pm'
+    }
+    if(hour>12){
+        time = (hour-12)+':'+min+'pm'
+    }
+    if(hour===24){
+        time = 12+':'+min+'am'
     }
 
-    times.push(`${hours}:${minutes} ${ampm}`)
+    return time
 }
+
+console.log(milToStandard(13.5));
 
 
 class TimeInput extends Component {
@@ -57,9 +66,11 @@ class TimeInput extends Component {
 
     return (
         <StyledRange
+           tipProps={{placement:'bottom'}}
+           tipFormatter={(val)=>milToStandard(val)}
         min={0}
         max={24}
-        step={.5}
+        step={.25}
         defaultValue={[6,14]}
         pushable={3}
         onChange={this.props.makeUserTooltip}

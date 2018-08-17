@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { Switch, Route,Router } from 'react-router'
-import Home from "./pages/index";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './components/app.css'
-import CashPage from "./pages/CashPage";
 import 'animate.css'
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Switch, Route,Router } from 'react-router'
+import CashPage from "./pages/CashPage";
+import DashPage from "./pages/DashPage";
+import Home from "./pages/index";
+import React, { Component } from 'react';
 
 const animations = {
     enter:'fadeIn',
@@ -20,6 +21,7 @@ class App extends Component {
                 <Switch location={location}   >
                         <Route exact path='/' children={({match,...rest})=>(match&&<Home {...rest} /> )} />
                         <Route exact path='/Cash' children={({match,...rest})=>(match&& <CashPage {...rest} /> )} />
+                        <Route exact path='/Dash' children={({match,...rest})=>(match&& <DashPage {...rest} /> )} />
                  </Switch>
                 </CSSTransition>
                 </TransitionGroup>

@@ -9,5 +9,5 @@ type userdrop {
 }
 
 extend type Mutation {
-    createCashdrop(totalDrop:Int,amDrop:Int,pmDrop:Int,shiftStart:Int,shiftEnd:Int,userDrop:Int,id:ID,name:String):userdrop
+    createCashdrop(totalDrop:Int,amDrop:Int,pmDrop:Int,shiftStart:Float,shiftEnd:Float,userDrop:Int,id:ID,name:String):userdrop
 }

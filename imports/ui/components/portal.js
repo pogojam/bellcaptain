@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
-import styled from 'styled-components'
 import { Meteor } from "meteor/meteor";
+import gql from "graphql-tag";
+import React, { Component } from 'react';
+import styled from 'styled-components'
 
 const Container = styled.div`
     display:grid;
@@ -36,7 +36,7 @@ class Portal extends Component {
     constructor(props) {
       super(props)
     
-      this.state = {
+      this.state = {  
          newuser:false
       }
     }
@@ -50,7 +50,9 @@ class Portal extends Component {
 
         const {redirect} = this.props
 
-        Meteor.loginWithPassword(email.value,pass.value,err=>err?console.log(err):redirect())
+        Meteor.loginWithPassword(email.value,pass.value,err=>{
+            err?this.setState({err:err},console.log(err)):redirect()
+        })
     }
 
     signUp(name,email,pass,phone){
@@ -63,17 +65,22 @@ class Portal extends Component {
 
     changeview(){
         this.setState(user=>(
-            {newuser:!user.newuser}
+            {newuser:!user.newuser,
+            err:null
+            }
         ))
     }
 
     render() {
+
+
         console.log(Accounts.users );
-        const {newuser} = this.state
+        const {newuser,err} = this.state
         return (
             <Container className='animated fadeInUp' >
                 <Logo  path={this.props.logo} />
                {newuser?<NewUser signUp={this.signUp.bind(this)} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
+               {err&&<p style={{ color:'red' }} >{err.reason}</p>}
                <Button  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</Button>
             </Container>
         );
