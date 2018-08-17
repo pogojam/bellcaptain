@@ -94,7 +94,7 @@ const NewUser = ({signUp})=>{
         name,
         phone
 
-    return <form className='animated flipInY' >
+    return <form style={{display:'grid'}} className='animated flipInY' >
         <input ref={e => name = e } placeholder='name' type="name"/>
         <input ref={e => email = e } placeholder='email' type="email"/>
         <input ref={e => pass = e } placeholder='password' type="password"/>
@@ -108,7 +108,7 @@ const SignIn = ({loginUser})=>{
     let email,
         pass
 
- return <form className='animated flipInY'  >
+ return <form style={{display:'grid'}} className='animated flipInY'  >
     <input  ref={e=>email = e} placeholder='email' type="email"/>
     <input  ref={e=>pass = e} placeholder='password' type="password" />
     <button onClick={(e)=>{e.preventDefault(); return loginUser(email,pass)}} >Sign In</button>
