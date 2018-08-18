@@ -9,8 +9,8 @@ import milToStandard from '../tools/milToStandard'
 
 
 const dropCash = gql`
-    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String) {
-      createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name){
+    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:Float) {
+      createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date){
         amDrop
       }
     }
@@ -72,7 +72,8 @@ class CashPage extends Component {
           userDrop:user.cash,
           shiftStart:user.time[0],
           shiftEnd:user.time[1],
-          name:user.name
+          name:user.name,
+          date:begun
         }}
       )
     })
@@ -132,20 +133,21 @@ class CashPage extends Component {
   }
 }
 
+
+
+
+
 const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
 
   // Styles
 
-  const StyledTooltip = styled.div `
-                display:grid;
-                text-align: center;
-                `
-  const StyledInfo = styled.div `
-      align-self: center;
-  `
-  const StyledTotals = styled.div `
-      margin:1em;
-      min-width: 15vw;
+  let cash = totalCash.toString()
+  console.log(typeof cash);
+  const StyledButton = styled.button`
+    
+      &:hover{
+        
+      }
   `
   const totalsChartOptios = {
   
@@ -210,6 +212,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
     ]
 }
 
+console.log(data.length);
 
   // Content
   return (
@@ -229,24 +232,38 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
           {milToStandard(user.time[0])} to {milToStandard(user.time[1])}
         </StyledInfo>
       ))}
-    <button style={{ minHeight:'20vh' }} onClick={()=>handleCashDrop()} >Drop Cash</button>
+    {data.length>0&&<StyledButton className={'animated fadeIn'}  style={{ minHeight:'20vh',fontSize:'1.5em' }} onClick={()=>handleCashDrop()} > <i class="fas fa-piggy-bank"/><br />Drop Cash</StyledButton>}
     </StyledTooltip>
   )
 
 }
 
+const StyledTooltip = styled.div `
+display:grid;
+text-align: center;
+`
+const StyledInfo = styled.div `
+align-self: center;
+`
+const StyledTotals = styled.div `
+margin:1em;
+min-width: 15vw;
+`
+
+
+
+
 const Page = styled.div `
     height: 100vh;
     width: 100vw;
     display: grid;
-    grid-template-rows: 1fr 6fr;
+    grid-template-rows: 1fr 10fr;
     grid-template-columns: 1fr;
 }
 `
 
 const Header = styled.div `
       background-color:black;
-      grid-row: 1;
       grid-column: 1/3;
       
 `

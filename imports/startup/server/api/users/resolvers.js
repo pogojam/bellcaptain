@@ -1,13 +1,19 @@
 import { Meteor } from 'meteor/meteor'
+import { GraphQLScalarType } from 'graphql';
+
+
+// const dateType = new GraphQLScalarType({
+//     name:'Date',
+//     description:'The Date',
+//     serialize:()=>
+// })
 
 // Logging for maping user objectdd
-
-
 
 console.log(Accounts);
 
 export default {
-
+    
     Query:{
         user(obj,arg,{user}){
 

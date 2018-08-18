@@ -7,7 +7,6 @@ extend type Query {
 type User{
     _id:String
     email:String
-
     loggedIn:Boolean
     name:String
     phone:ID

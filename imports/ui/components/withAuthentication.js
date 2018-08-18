@@ -23,12 +23,12 @@ const withAuthentication = (userRole)=>((Component)=>{
             
         render() {
             return (
-                <Component {...this.props} user={this.props.data.user} />
+                <Component {...this.props} {...this.props.data} />
             );
         }
     }
 
-    return graphql(user)(withRouter(WithAuthentication))
+    return graphql(user,{options:{fetchPolicy:'network-only'}})(withRouter(WithAuthentication))
     
 })
 
