@@ -8,12 +8,29 @@ import { GraphQLScalarType } from 'graphql';
 //     serialize:()=>
 // })
 
-// Logging for maping user objectdd
+// Logging for maping user objectd
 
-console.log(Accounts);
+const DateScalar = new GraphQLScalarType({
+    name:'DateScalarType',
+    description:'converts into a date for graphql',
+    serialize(val){
+        return val
+    },
+    parseValue(val){
+        return val
+    },
+    parseLiteral(ast) {
+        switch (ast.kind) {
+          // Implement your own behavior here by returning what suits your needs
+          // depending on ast.kind
+        }
+      }
+})
+
+
 
 export default {
-    
+    DateScalarType:DateScalar,
     Query:{
         user(obj,arg,{user}){
 

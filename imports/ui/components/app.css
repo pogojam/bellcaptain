@@ -8,6 +8,7 @@
     transition: all .2s linear;
     display: grid;
     align-items: center;
+
 }
 
 #App{
@@ -19,11 +20,11 @@
 }
 
 button{
-    background-color: #A9FDAC;
+
     border: none;
 }
 
-button.head{
+/* button.head{
     font-size: 2em;
 }
 button.head i {
@@ -31,7 +32,7 @@ button.head i {
 }
 button.head:focus{
     outline: none;
-}
+} */
 
 .fade-appear{
     opacity: 0;

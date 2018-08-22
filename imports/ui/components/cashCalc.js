@@ -67,7 +67,24 @@ class UserCashInput extends Component {
   makeUserTooltip(e) {
     let hours = e[1] - e[0];
     let time = [e[0], e[1]];
+    let shift
+ // Determine if user adds to AM shift or PM shift
+
+ let timeAverage = (time[0] + time[1])/2
+
+
+
+ if(timeAverage<=13){
+      shift = 'AM'
+ }
+ if(timeAverage>=17){
+    shift = 'PM'
+ }
+
+
+// set inital states
     this.setState({
+      shift:shift,
       hours: hours,
       time: time,
       tooltip: true
@@ -81,14 +98,20 @@ class UserCashInput extends Component {
   }
 
   confirm() {
-    const { time, cash, locked } = this.state;
+    const { time, cash, shift } = this.state;
     const { name } = this.props;
-    this.setState({
-      locked: true
-    });
 
-    let data = [{ time, name, cash }];
+    // Add user to cashpage data
+
+    let data = [{ time, name, cash,shift }];
     this.props.handleCashData(data);
+
+      // Activate Drop Button  locked to true will show button
+
+      this.setState({
+        locked: true
+      });
+  
   }
 
   render() {

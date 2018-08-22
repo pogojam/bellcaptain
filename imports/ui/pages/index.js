@@ -33,9 +33,19 @@ class Home extends Component {
 const Welcome = ({redirect}) => (
   <Container>
     <h1>Welcome back</h1>
-    <button onClick={()=>redirect()} >enter</button>
+    <Button onClick={()=>redirect()} >enter</Button>
   </Container>
 );
+
+const Button = styled.button`
+      background: aquamarine;
+    font-size: 1.3em;
+    border-radius: 24px;
+    transition:all 1.4s;
+    &:hover{
+      letter-spacing:.3em;
+    }
+`
 
 const Container = styled.div`
   display: grid;

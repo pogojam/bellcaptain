@@ -5,11 +5,15 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 import Nav from "../components/nav";
 import ReactEcharts from 'echarts-for-react';
+import echarts from 'echarts';
 import milToStandard from '../tools/milToStandard'
+import graphTheme from "../themes/graphThemes";
+
+echarts.registerTheme('captainTheme',graphTheme)
 
 
 const dropCash = gql`
-    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:Float) {
+    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:DateScalarType) {
       createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date){
         amDrop
       }
@@ -84,38 +88,38 @@ class CashPage extends Component {
 
     let totalCash = 0,
     totalAM = 0,
-    totalPM = 0
+    totalPM = 0,
+    cutTo = null
 
     this.state
     .data
     .forEach(user => {
-
       totalCash = user.cash + totalCash
-
-// Determine if user adds to AM shift or PM shift
-
-      let timeAverage = (user.time[0] + user.time[1])/2
-
-      if(timeAverage<=13){
-           totalAM += user.cash
-      }
-      if(timeAverage>=17){
-         totalPM += user.cash
-      }
-
+      
+      user.shift==='AM'? totalAM += user.cash:null
+      user.shift==='PM'? totalPM += user.cash:null
     })
+
+    totalAM>totalPM?cutTo='AM':cutTo='PM'
 
     this.setState({
       totalCash:totalCash,
       totalAM:totalAM,
-      totalPM:totalPM
+      totalPM:totalPM,
+      cutTo:cutTo
     })
 
   }
 
+  showConfirmation(){
+    this.setState({
+      confirm:true
+    })
+  }
+
   render() {
     //  Totals
-    const {totalCash,totalAM,totalPM}=this.state
+    const {totalCash,totalAM,totalPM,confirm}=this.state
     return (
       <Page>
         <Header>
@@ -127,29 +131,66 @@ class CashPage extends Component {
           .bind(this)}
           handleCashDrop={this.handleCashDrop.bind(this)}
           {...this.props}/>
-        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data} handleCashDrop={this.handleCashDrop.bind(this)} />
+        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}  showConfirmation={this.showConfirmation.bind(this)} />
+        {confirm===true&& <Confirm {...this.state} handleCashDrop={this.handleCashDrop.bind(this)} />}
       </Page>
     )
   }
 }
 
+const Confirm= (props)=>{
+
+      const {cutTo,totalCash} = props
+        let TotalCuts = 0
+
+    const adjustCut = (perHr)=>{ 
+    if(!perHr){
+      // Gets perHr cut form user ,recurssive
+       props.data.map(user=>{
+          let shiftLength = user.time[1]-user.time[0]
+              TotalCuts = TotalCuts + shiftLength
+          if(user.shift === cutTo){ 
+            user.cuts= shiftLength + 3
+            cuts=TotalCuts + 3
+          }
+          else{
+            user.cuts = shiftLength
+          }
+      }),adjustCut(totalCash/TotalCuts);
+    }
+  // adds cuts to the user object 
+    if(perHr){
+  return  props.data.map((user)=>{
+      let shiftLength = user.time[1]-user.time[0]
+      user.cashBack = perHr * user.cuts
+    })}
+    }
+
+    adjustCut()
+
+    console.log(props);
+
+
+    return <StyledConfirm className={'animated fadeIn'} >
+          <div>
+          {props.data.map(user=>{
+              return <p>
+                {user.name}
+                {user.shift}
+                {user.cashBack}
+              </p>
+          })}
+          </div>
+    </StyledConfirm>
+}
 
 
 
-
-const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
-
-  // Styles
+const UserTooltip = ({totalAM,totalPM,data, totalCash,showConfirmation}) => {
 
   let cash = totalCash.toString()
-  console.log(typeof cash);
-  const StyledButton = styled.button`
-    
-      &:hover{
-        
-      }
-  `
-  const totalsChartOptios = {
+ 
+  const totalsChartOptions = {
   
     legend: {
         orient: 'vertical',
@@ -161,7 +202,6 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
       {
         type:'pie',
         radius: [0, '30%'],
-
         label: {
             normal: {
                 position: 'center',
@@ -189,7 +229,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,handleCashDrop}) => {
             name:'Shift Totals',
             type:'pie',
             radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
+            avoidLabelOverlap: true,
             label: {
                 normal: {
                     show: false,
@@ -220,7 +260,7 @@ console.log(data.length);
 
       <StyledTotals>
    
-      <ReactEcharts style={{ width:'100%' }} option={totalsChartOptios} />
+      <ReactEcharts theme={'captainTheme'} style={{ height:'40vh' }} option={totalsChartOptions} />
       </StyledTotals>
 
       {data.map((user, id) => (
@@ -232,12 +272,31 @@ console.log(data.length);
           {milToStandard(user.time[0])} to {milToStandard(user.time[1])}
         </StyledInfo>
       ))}
-    {data.length>0&&<StyledButton className={'animated fadeIn'}  style={{ minHeight:'20vh',fontSize:'1.5em' }} onClick={()=>handleCashDrop()} > <i class="fas fa-piggy-bank"/><br />Drop Cash</StyledButton>}
+    {data.length>0&&<StyledButton className={'animated fadeIn'}   onClick={()=>showConfirmation()} > <i className="fas fa-piggy-bank"/><br />Drop Cash</StyledButton>}
     </StyledTooltip>
   )
 
 }
 
+
+// Styles
+
+const StyledConfirm = styled.div`
+   width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(127,255,212 ,.5 );
+`
+
+
+const StyledButton = styled.button`
+      background-color:aquamarine;
+      min-height:10vh;
+      font-size:1.5em;
+&:hover{
+  
+}
+`
 const StyledTooltip = styled.div `
 display:grid;
 text-align: center;
@@ -249,10 +308,6 @@ const StyledTotals = styled.div `
 margin:1em;
 min-width: 15vw;
 `
-
-
-
-
 const Page = styled.div `
     height: 100vh;
     width: 100vw;
@@ -263,9 +318,9 @@ const Page = styled.div `
 `
 
 const Header = styled.div `
-      background-color:black;
-      grid-column: 1/3;
-      
+      justify-content:center;
+      grid-column: 1/4;
+      padding: 1em;
 `
 
 

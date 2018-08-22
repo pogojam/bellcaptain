@@ -62,7 +62,7 @@ class Content extends Component {
             <StyledContent>
             <ProfilePic/>
             <Overview {...user} />
-            <Charts/>
+
             </StyledContent>
         );
     }
