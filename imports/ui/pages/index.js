@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import Portal from "../components/portal";
 import styled from "styled-components";
 import withAuthentication from "../components/withAuthentication";
@@ -15,7 +15,7 @@ class Home extends Component {
     const { user, loading } = this.props;
 
     return (
-    !loading?  <div>
+    !loading?  <Fragment>
         {user ? (
           <Welcome redirect={this.redirect.bind(this)} />
         ) : (
@@ -24,7 +24,7 @@ class Home extends Component {
             redirect={this.redirect.bind(this)}
           />
         )}
-      </div>:
+      </Fragment>:
       <div/>
     );
   }
@@ -50,6 +50,7 @@ const Button = styled.button`
 const Container = styled.div`
   display: grid;
   justify-content: center;
+  margin:auto;
 `;
 
 export default withAuthentication()(Home);

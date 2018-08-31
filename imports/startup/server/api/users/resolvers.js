@@ -2,13 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { GraphQLScalarType } from 'graphql';
 
 
-// const dateType = new GraphQLScalarType({
-//     name:'Date',
-//     description:'The Date',
-//     serialize:()=>
-// })
 
-// Logging for maping user objectd
 
 const DateScalar = new GraphQLScalarType({
     name:'DateScalarType',
@@ -19,7 +13,7 @@ const DateScalar = new GraphQLScalarType({
     parseValue(val){
         return val
     },
-    parseLiteral(ast) {
+    parseLiteral(ast) {  
         switch (ast.kind) {
           // Implement your own behavior here by returning what suits your needs
           // depending on ast.kind
@@ -52,7 +46,7 @@ export default {
             return obj.profile.name
         },
         phone(obj,arg,{user}){
-            return user.profile.phoen
+            return user.profile.phone
         }
     }
 }

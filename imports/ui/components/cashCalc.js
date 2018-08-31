@@ -47,7 +47,7 @@ class calculator extends Component {
       return (
         <div className="animated calculator ">
           {users.map((user) => (
-            <UserCashInput {...this.props} key={user._id} name={user.name} />
+            <UserCashInput {...this.props} key={user._id} _id={user._id} name={user.name} />
           ))}
         </div>
       );
@@ -71,7 +71,6 @@ class UserCashInput extends Component {
  // Determine if user adds to AM shift or PM shift
 
  let timeAverage = (time[0] + time[1])/2
-
 
 
  if(timeAverage<=13){
@@ -99,11 +98,11 @@ class UserCashInput extends Component {
 
   confirm() {
     const { time, cash, shift } = this.state;
-    const { name } = this.props;
+    const { name,_id } = this.props;
 
     // Add user to cashpage data
 
-    let data = [{ time, name, cash,shift }];
+    let data = [{ time, name, cash,shift,_id }];
     this.props.handleCashData(data);
 
       // Activate Drop Button  locked to true will show button

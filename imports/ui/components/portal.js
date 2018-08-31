@@ -8,24 +8,22 @@ const Container = styled.div`
     display:grid;
     margin:auto;
     width:30vw;
-    background-color:aqua;
+    
+  background: #0cebeb; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #0cebeb, #20e3b2, #29ffc6); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #0cebeb, #20e3b2, #29ffc6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
     padding: 3em;
     grid-gap:3em;
-    border:solid black 1px;
+
     text-align:center;
 `
 const Button = styled.p`
        transition:all .7s;
     &:hover{
         transform:scale(1.2);
-    }
-`
-
-const AddUser = gql`
-    mutation AddUser($name:String!,$email:String,$phone:ID){
-        AddUser(name:$name,email:$email,phone:$phone){
-            _id
-        }
     }
 `
 
@@ -51,15 +49,31 @@ class Portal extends Component {
         const {redirect} = this.props
 
         Meteor.loginWithPassword(email.value,pass.value,err=>{
-            err?this.setState({err:err},console.log(err)):redirect()
+            err?this.setState({err:[err.reason]},console.log(err)):redirect()
         })
     }
 
-    signUp(name,email,pass,phone){
+    signUp(name,email,pass,phone,key){
 
-            Accounts.createUser({email:email.value,password:pass.value,profile:{name:name.value,phone:phone.value} },(err)=>{
-                err?console.log(err):console.log('Account Created')
-                this.props.redirect()                
+        let error = []
+ 
+        pass.value.length>5?null:error.push('password must be over 5 characters')
+        phone.value.length===10?null:error.push('phone number should include area code')
+        name.value.split(' ').length===2?null:error.push('must type first and last name')
+
+
+
+        
+        error.length===0?
+            Accounts.createUser({email:email.value,password:pass.value,profile:{name:name.value,phone:`+1${phone.value}`,key:key.value} },(err)=>{
+                err?this.setState({err:[err.reason]}):(
+                    console.log('Account Created'),
+                    this.props.redirect()
+                )
+                                
+            }):
+            this.setState({
+                err:error
             })
     }
 
@@ -80,8 +94,8 @@ class Portal extends Component {
             <Container >
                 <Logo  path={this.props.logo} />
                {newuser?<NewUser signUp={this.signUp.bind(this)} />: <SignIn loginUser={this.loginUser.bind(this)}/>}
-               {err&&<p style={{ color:'red' }} >{err.reason}</p>}
-               <Button  onClick={this.changeview.bind(this)}> {newuser?'already have an account?':'dont have an account?'}</Button>
+               {err&&<p style={{ color:'red' }} >{err.map((err,id)=><li key={id}>{err}</li>)}</p>}
+               <Button  onClick={this.changeview.bind(this)}> {newuser?'Already Have An Account?':'Dont Have An Account?'}</Button>
             </Container>
         );
     }
@@ -92,14 +106,16 @@ const NewUser = ({signUp})=>{
     let email,
         pass,
         name,
-        phone
+        phone,
+        key
 
     return <form style={{display:'grid'}} className='animated flipInY' >
-        <input ref={e => name = e } placeholder='name' type="name"/>
-        <input ref={e => email = e } placeholder='email' type="email"/>
-        <input ref={e => pass = e } placeholder='password' type="password"/>
-        <input  ref={e => phone = e } placeholder='phone number' type="phonenumber" />
-        <button onClick={(e)=>{e.preventDefault(); return signUp(name,email,pass,phone)}} > Sign up</button>
+        <input ref={e => name = e } placeholder='First Last name' name="name" type="name"/>
+        <input ref={e => email = e } placeholder='email' name="email" type="email"/>
+        <input ref={e => pass = e } placeholder='password' name="password" type="password"/>
+        <input ref={e => key = e } placeholder='key' type="key"/>
+        <input  ref={e => phone = e } placeholder='phone xxx-xxx-xxxx' type="phonenumber" />
+        <button onClick={(e)=>{e.preventDefault(); return signUp(name,email,pass,phone,key)}} > Sign up</button>
     </form>
 }
 
@@ -109,8 +125,8 @@ const SignIn = ({loginUser})=>{
         pass
 
  return <form style={{display:'grid'}} className='animated flipInY'  >
-    <input  ref={e=>email = e} placeholder='email' type="email"/>
-    <input  ref={e=>pass = e} placeholder='password' type="password" />
+    <input  ref={e=>email = e} placeholder='email' name="email" type="email"/>
+    <input  ref={e=>pass = e} placeholder='password' name="password" type="password" />
     <button  onClick={(e)=>{e.preventDefault(); return loginUser(email,pass)}} >Sign In</button>
     </form>
 }
@@ -118,4 +134,4 @@ const SignIn = ({loginUser})=>{
 
 
 
-export default graphql( AddUser,{name:'AddUser'})(Portal);
+export default Portal

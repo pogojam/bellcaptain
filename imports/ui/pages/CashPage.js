@@ -13,8 +13,8 @@ echarts.registerTheme('captainTheme',graphTheme)
 
 
 const dropCash = gql`
-    mutation createCashdrop ($totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:DateScalarType) {
-      createCashdrop(totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date){
+    mutation createCashdrop ($userId:ID,$cashBack:Int,$shift:String,$totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:DateScalarType) {
+      createCashdrop( userId:$userId,cashBack:$cashBack,shift:$shift,totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date){
         amDrop
       }
     }
@@ -59,23 +59,27 @@ class CashPage extends Component {
     
   }
 
-  handleCashDrop(){
-    const {totalDrop,totalAM,totalPM} = this.state
+  handleCashDrop(data){
+    const {totalCash,totalAM,totalPM} = this.state
 
     var date = new Date()
     var begun = moment(date).format("MM.DD.YYYY");
-    
-                console.log(begun)
-                
-    this.state.data.map(user=>{
+         
+      console.log(data);
+
+
+    data.map(user=>{
       this.props.dropCash(
         {variables:{
-          totalDrop:totalDrop,
+          userId:user._id,
+          totalDrop:totalCash,
           amDrop:totalAM,
           pmDrop:totalPM,
           userDrop:user.cash,
           shiftStart:user.time[0],
           shiftEnd:user.time[1],
+          shift:user.shift,
+          cashBack:user.cashBack,
           name:user.name,
           date:begun
         }}
@@ -111,9 +115,9 @@ class CashPage extends Component {
 
   }
 
-  showConfirmation(){
-    this.setState({
-      confirm:true
+  toggleConfirm(){
+    this.setState((prevState)=> {
+      return {confirm:!prevState.confirm}
     })
   }
 
@@ -122,17 +126,15 @@ class CashPage extends Component {
     const {totalCash,totalAM,totalPM,confirm}=this.state
     return (
       <Page>
-        <Header>
-          <Nav history={this.props.history} > </Nav>
-        </Header>
+        
         <CashCalc
           handleCashData={this
           .handleCashData
           .bind(this)}
           handleCashDrop={this.handleCashDrop.bind(this)}
           {...this.props}/>
-        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}  showConfirmation={this.showConfirmation.bind(this)} />
-        {confirm===true&& <Confirm {...this.state} handleCashDrop={this.handleCashDrop.bind(this)} />}
+        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}  toggleConfirm={this.toggleConfirm.bind(this)} />
+        {confirm===true&& <Confirm {...this.state} toggleConfirm={this.toggleConfirm.bind(this)}  handleCashDrop={this.handleCashDrop.bind(this)} />}
       </Page>
     )
   }
@@ -141,52 +143,76 @@ class CashPage extends Component {
 const Confirm= (props)=>{
 
       const {cutTo,totalCash} = props
+
         let TotalCuts = 0
 
     const adjustCut = (perHr)=>{ 
     if(!perHr){
       // Gets perHr cut form user ,recurssive
        props.data.map(user=>{
-          let shiftLength = user.time[1]-user.time[0]
-              TotalCuts = TotalCuts + shiftLength
+          let shiftLength = user.time[1]-user.time[0];
+
+              TotalCuts = TotalCuts + shiftLength;
+
+          !user.shift?user.shift='MID':null
+
+
+          
           if(user.shift === cutTo){ 
-            user.cuts= shiftLength + 3
-            cuts=TotalCuts + 3
+            user.cut= shiftLength + 3
+            TotalCuts=TotalCuts + 3
           }
+            
+          // Case: shift past 5pm on a PM cut credit  
+          else if(cutTo==='PM'&&user.time[1]>=17){
+            user.time[1]<20?(user.cut = shiftLength+(20-user.time[1]),TotalCuts+=20-user.time[1]):(TotalCuts+=3,user.cut=shiftLength+3)
+          }
+          // Case: shift before 10am on a AM cut credit
+          else if( cutTo ==='AM'&&user.time[0]<=10) {
+              user.time[0]<7?(user.cut=shiftLength+3,TotalCuts+=3):(user.cut=shiftLength+(10-user.time[0]),TotalCuts+=10-user.time[0])
+          }
+          
           else{
-            user.cuts = shiftLength
+            user.cut = shiftLength
           }
+
+
+
       }),adjustCut(totalCash/TotalCuts);
     }
   // adds cuts to the user object 
     if(perHr){
   return  props.data.map((user)=>{
       let shiftLength = user.time[1]-user.time[0]
-      user.cashBack = perHr * user.cuts
+      user.cashBack = Math.floor(perHr * user.cut)
     })}
+
     }
 
     adjustCut()
 
-    console.log(props);
-
 
     return <StyledConfirm className={'animated fadeIn'} >
-          <div>
-          {props.data.map(user=>{
-              return <p>
-                {user.name}
-                {user.shift}
-                {user.cashBack}
-              </p>
+    <div>
+          {props.data.map((user,id)=>{
+              return <ul key={id}>
+              <li>  {user.name} </li>
+                <li>{user.shift}</li> 
+                <li>Drop ${user.cash}</li> 
+                 <li>Cash Back ${user.cashBack }</li>
+              </ul>
           })}
-          </div>
+
+            <button onClick={()=>(props.handleCashDrop(props.data))} > Confirm </button>
+            <button onClick={()=>(props.toggleConfirm())} > Cancel </button>
+    </div>
+
     </StyledConfirm>
 }
 
 
 
-const UserTooltip = ({totalAM,totalPM,data, totalCash,showConfirmation}) => {
+const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
 
   let cash = totalCash.toString()
  
@@ -252,7 +278,6 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,showConfirmation}) => {
     ]
 }
 
-console.log(data.length);
 
   // Content
   return (
@@ -264,7 +289,7 @@ console.log(data.length);
       </StyledTotals>
 
       {data.map((user, id) => (
-        <StyledInfo className="animated fadeIn" key={id}>
+        <StyledInfo className="animated fadeIn fadeInRight" key={id}>
           {user.name}
           <br/>
           drop ${user.cash}
@@ -272,7 +297,7 @@ console.log(data.length);
           {milToStandard(user.time[0])} to {milToStandard(user.time[1])}
         </StyledInfo>
       ))}
-    {data.length>0&&<StyledButton className={'animated fadeIn'}   onClick={()=>showConfirmation()} > <i className="fas fa-piggy-bank"/><br />Drop Cash</StyledButton>}
+    {data.length>0&&<StyledButton className={'animated fadeIn'}   onClick={()=>toggleConfirm()} > <i className="fas fa-piggy-bank"/><br />Drop Cash</StyledButton>}
     </StyledTooltip>
   )
 
@@ -282,10 +307,40 @@ console.log(data.length);
 // Styles
 
 const StyledConfirm = styled.div`
-   width: 100vw;
+      align-content: center;
+    justify-content: center;
+    width: 100vw;
     height: 100vh;
     position: absolute;
+    display: grid;
     background-color: rgba(127,255,212 ,.5 );
+
+    button{
+      
+    }
+
+      div{
+        border-radius: 9px;
+        width: 60vw;
+    background: aquamarine;
+    height: 60vh;
+    padding: 2em;
+
+          
+          ul{
+            list-style: none;
+    display: flex;
+    align-items: center;
+    background-color: mediumaquamarine;
+    height: 2em;
+    border-radius: 16px;
+    margin-top: 1em;
+            li{
+              margin:auto;
+              }
+          }
+      }
+
 `
 
 
@@ -299,28 +354,35 @@ const StyledButton = styled.button`
 `
 const StyledTooltip = styled.div `
 display:grid;
+height:100%;
 text-align: center;
+transition:all 1s linear;
 `
 const StyledInfo = styled.div `
+
 align-self: center;
+margin-left: 2em;
+font-size: 0.7em;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    text-align:center;
+    background:#7DFF00;
+padding: .3em;
+
 `
 const StyledTotals = styled.div `
 margin:1em;
 min-width: 15vw;
 `
 const Page = styled.div `
-    height: 100vh;
-    width: 100vw;
-    display: grid;
-    grid-template-rows: 1fr 10fr;
-    grid-template-columns: 1fr;
+       display:grid;
+       grid-template-columns: 10fr 1fr;
+       height:100%
 }
 `
 
 const Header = styled.div `
-      justify-content:center;
       grid-column: 1/4;
-      padding: 1em;
 `
 
 

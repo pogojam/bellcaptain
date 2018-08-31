@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import Nav from "../components/nav";
 import styled from '../../../node_modules/styled-components';
 import ReactEcharts from 'echarts-for-react';
 import {  graphql } from 'react-apollo'
+import Chart from "../components/userChart";
 import gql from '../../../node_modules/graphql-tag';
+
+// GraphQL Calls 
 
 const GetUser = gql`
     {
@@ -16,119 +19,95 @@ const GetUser = gql`
     }
 `
 
-const Container = styled.div`
-    display: grid;
-    grid-template:'nav' 1fr 'content' 10fr;
-    height: 100vh;
-    width: 100vw;
-`
+
+// Page Comonent
 
 class DashPage extends Component {
 
     render() {
-        console.log('fire');
         return (
-            <Container>
-                <Nav history={this.props.history} />
-
+            <Fragment>
                 {!this.props.data.loading &&<Content {...this.props.data} />}
-            </Container>
+            </Fragment>
         );
     }
 }
-
-
-// const Content = ({user})=>{
-//     console.log(user)
-
-
-// return <StyledContent>
-//     <ProfilePic/>
-//     <Overview {...user} />
-//     <Charts/>
-//     </StyledContent>
-// }
-const StyledContent =  styled.div`
-display:grid;
-grid-template:  'pic overview overview' 20% 
-                'charts charts charts'; 
-
-`
 
 class Content extends Component {
     render() {
         const {user}= this.props
         return (
             <StyledContent>
-            <ProfilePic/>
             <Overview {...user} />
-
+            <Charts/>
             </StyledContent>
         );
     }
 }
 
+
+// Main Content
+
 const Overview = ({email,name})=>{
-    const StyledOverview=styled.div`
-    grid-area: overview;
-    background: #5BC0BE;
-    padding: 2em;
-    display: grid;
-    align-content: center;
-    `
+    
     return <StyledOverview>
-
-        <p>email: {email}</p>
-        <p>name:{name}</p>
-
-
+       <Pic/>
+       <div>
+        <h2 >Profile</h2> 
+        <li>email  {email}</li>
+        <li>name  {name}</li>
+       </div>
     </StyledOverview>
 
 }
 
-const ProfilePic = ()=>{
-    const Pic = styled.img`
-    `
-    const Container = styled.div`
-    background:#FA7921;
-    `
-    
 
-    return <Container style={{gridArea:'pic'}} >
-        <Pic/>
-    </Container>
-}
+// Charts
 
 const Charts = ()=>{
    
-    return <div style={{gridArea:'charts'}} >
-    <ReactEcharts option={chartOptions} />
+    return <div  >
+    <Chart limit={3} />
     </div>
 }
 
 
-// Chart options
 
 
-const chartOptions = {
-    series : [
-        {
-            name: 'Reference Page',
-            type: 'pie',
-            radius: '55%',
-            data:[
-                {value:400, name:'Searching Engine'},
-                {value:335, name:'Direct'},
-                {value:310, name:'Email'},
-                {value:274, name:'Alliance Advertisement'},
-                {value:235, name:'Video Advertisement'}
-            ]
-        }
-    ]
+// Styles
+
+
+const StyledContent =  styled.div`
+        display:grid;
+        height:100%;
+        grid-template-columns:1fr 3fr;
+`
+
+
+const StyledOverview=styled.div`
+    background-color:#0cebeb;
+    display: grid;
+    grid-template-rows: 2fr repeat(7,1fr);
+    border-top-right-radius: 16px;
+    margin-top: 10px;
+    grid-gap:10px;
+    ul{
+        padding-left:10px;
+    }
+    
+    &>*{
+        background-color:grey;
+        list-style:none;
+    }
 }
 
 
+    `
 
+
+const Pic = styled.img`
+background-color:antiquewhite;
+    `
 
 
 
