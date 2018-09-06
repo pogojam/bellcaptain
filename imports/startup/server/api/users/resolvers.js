@@ -31,10 +31,17 @@ export default {
             return user
         },    
         users(obj,arg,{userId}){
-
                 return Meteor.users.find().fetch({})
         }
     },
+     Mutation :{
+         updateUser(obj,{name,email,phone},{user}){
+             Meteor.users.update({_id:user._id},{$set:{emails:[{address:email}],profile:{name:name,phone:phone}}})
+             data = Meteor.users.find({_id:user._id}).fetch()
+             console.log(data.profile)  
+             return   data[1]    
+         }
+     },
     User:{
         loggedIn(obj,arg,{user}){
             return obj._id===user._id?true:false

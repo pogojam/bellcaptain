@@ -7,10 +7,10 @@ const Container = styled.div`
     height:10vh;
     display:flex;
     justify-content: flex-end;
-    grid-area:'nav'
-background: #a8ff78;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to left, #78ffd6, #0cebeb);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to left, #78ffd6, #0cebeb); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    grid-area:'nav';
+    padding: 1em;
+    background:none;
+
 
   button{
     color:#2d2f31;
@@ -46,7 +46,7 @@ const Nav = ({ history, logo, pages }) => {
     location==='/'?null:
     <Container>
       {logo ? <img src={logo} /> : <Captain />}
-
+      <button onClick={()=>{Meteor.logout(),history.push('/')}} >Logout</button>
       {pages.map((page,id)=>{
 
           if(!(location===page.route)){

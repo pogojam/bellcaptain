@@ -2,6 +2,9 @@ extend type Query {
     users:[User]
     user:User
 }
+extend type Mutation{
+    updateUser(name:String,email:String,phone:ID):User
+}
 
 
 type User{

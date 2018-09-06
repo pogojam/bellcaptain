@@ -5,6 +5,9 @@ import ReactEcharts from 'echarts-for-react';
 import {  graphql } from 'react-apollo'
 import Chart from "../components/userChart";
 import gql from '../../../node_modules/graphql-tag';
+import Toggle from '../components/toggle'
+import ProfileChange from '../components/profileChange'
+import { inherits } from 'util';
 
 // GraphQL Calls 
 
@@ -36,10 +39,13 @@ class DashPage extends Component {
 class Content extends Component {
     render() {
         const {user}= this.props
+
         return (
             <StyledContent>
-            <Overview {...user} />
-            <Charts/>
+            <SideBar refetch={this.props.refetch} {...user} />
+            <ChartWrapper>
+                <Charts type={'Cash Back'} lookback={'week'} />
+            </ChartWrapper>
             </StyledContent>
         );
     }
@@ -48,56 +54,113 @@ class Content extends Component {
 
 // Main Content
 
-const Overview = ({email,name})=>{
-    
-    return <StyledOverview>
-       <Pic/>
+const SideBar = ({ refetch,email,name,phone})=>{
+
+    return <StyledSideBar>
+        
+       <i style={{fontSize: '2em',margin:'auto'}} className="fas fa-user-astronaut"></i>
+       {/* break */}
        <div>
-        <h2 >Profile</h2> 
-        <li>email  {email}</li>
-        <li>name  {name}</li>
+        <li>{name}</li>
+        <li>{email}</li>
+        <li>{phone}</li>
        </div>
-    </StyledOverview>
+       {/* break */}
+       <div >
+           <Toggle>
+               {({on,toggle})=>{
+                 return  <div>
+                <button onClick={toggle} style={{color:'aquamarine',background:'rgba(41,52,65,1)',border:'1px solid'}} href="">Change Info</button>
+                {on && <ProfileChange refetch={refetch}  name={name} email={email} phone={phone} /> }
+                   </div>
+               }}
+           </Toggle>
+       </div>
+    </StyledSideBar>
 
 }
 
 
 // Charts
 
-const Charts = ()=>{
-   
-    return <div  >
-    <Chart limit={3} />
-    </div>
+ class Charts extends Component {
+     constructor(props) {
+       super(props)
+     
+       this.state = {
+          lookback:7
+       }
+     }
+     
+
+    handleLookback(e){
+        this.setState({
+            lookback:e.target.value
+        })
+    }
+
+  render() {
+
+    const {lookback} = this.state
+
+    return <StyledCharts >
+    <Chart type={this.props.type} limit={lookback} />
+    <select value={this.state.value} onChange={this.handleLookback.bind(this)} >
+        <option  value={7} >Week</option>
+        <option value={30} >Month</option>
+        <option value={365} >Year</option>
+    </select>
+    </StyledCharts>
+  }
 }
+
 
 
 
 
 // Styles
 
+const ChartWrapper = styled.div`
+display:grid;
+    &>*{
+        margin:1em;
+    }
+`
+
+const StyledCharts = styled.div`
+            padding: 1em;
+            background-color:rgba(41,52,65,1);
+            border-radius:16px;
+`
 
 const StyledContent =  styled.div`
         display:grid;
         height:100%;
-        grid-template-columns:1fr 3fr;
+        grid-template-columns:minmax(105px,160px) 3fr;
 `
 
 
-const StyledOverview=styled.div`
-    background-color:#0cebeb;
+const StyledSideBar = styled.div`
+    background-color: rgba(41,52,65,1);
     display: grid;
     grid-template-rows: 2fr repeat(7,1fr);
     border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
     margin-top: 10px;
     grid-gap:10px;
+    max-height: 80vh;
+
     ul{
         padding-left:10px;
     }
     
     &>*{
-        background-color:grey;
+        color: aquamarine;
+    border-bottom: 1px solid;
+    padding: .3em;
         list-style:none;
+        display:grid;
+        justify-content:center;
     }
 }
 

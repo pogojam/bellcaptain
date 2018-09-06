@@ -3,7 +3,6 @@ import CashCalc from "../components/cashCalc";
 import styled from "styled-components";
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
-import Nav from "../components/nav";
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import milToStandard from '../tools/milToStandard'
@@ -13,8 +12,8 @@ echarts.registerTheme('captainTheme',graphTheme)
 
 
 const dropCash = gql`
-    mutation createCashdrop ($userId:ID,$cashBack:Int,$shift:String,$totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:DateScalarType) {
-      createCashdrop( userId:$userId,cashBack:$cashBack,shift:$shift,totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date){
+    mutation createCashdrop ($userId:ID,$cashBack:Int,$shift:String,$totalDrop:Int,$amDrop:Int,$pmDrop:Int,$shiftStart:Float,$shiftEnd:Float,$userDrop:Int,$name:String,$date:DateScalarType,$phone:ID) {
+      createCashdrop( userId:$userId,cashBack:$cashBack,shift:$shift,totalDrop:$totalDrop,amDrop:$amDrop,pmDrop:$pmDrop,shiftStart:$shiftStart,shiftEnd:$shiftEnd,userDrop:$userDrop,name:$name,date:$date,phone:$phone){
         amDrop
       }
     }
@@ -64,9 +63,6 @@ class CashPage extends Component {
 
     var date = new Date()
     var begun = moment(date).format("MM.DD.YYYY");
-         
-      console.log(data);
-
 
     data.map(user=>{
       this.props.dropCash(
@@ -81,11 +77,12 @@ class CashPage extends Component {
           shift:user.shift,
           cashBack:user.cashBack,
           name:user.name,
+          phone:user.phone,
           date:begun
         }}
       )
     })
-
+    this.props.history.push('/Dash')
   }
 
   calcTotals(){
@@ -285,7 +282,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
 
       <StyledTotals>
    
-      <ReactEcharts theme={'captainTheme'} style={{ height:'40vh' }} option={totalsChartOptions} />
+      <ReactEcharts theme={'captainTheme'} style={{ height:'30vh' }} option={totalsChartOptions} />
       </StyledTotals>
 
       {data.map((user, id) => (
@@ -325,6 +322,8 @@ const StyledConfirm = styled.div`
     background: aquamarine;
     height: 60vh;
     padding: 2em;
+    position: absolute;
+    justify-self: center;
 
           
           ul{
@@ -345,7 +344,8 @@ const StyledConfirm = styled.div`
 
 
 const StyledButton = styled.button`
-      background-color:aquamarine;
+background-color:rgba(41,52,65,1);
+    color: #87f7cf;
       min-height:10vh;
       font-size:1.5em;
 &:hover{
@@ -366,7 +366,8 @@ font-size: 0.7em;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     text-align:center;
-    background:#7DFF00;
+    background-color:rgba(41,52,65,1);
+    color: #87f7cf;
 padding: .3em;
 
 `
@@ -386,4 +387,4 @@ const Header = styled.div `
 `
 
 
-export default graphql(dropCash,{name:'dropCash'})(CashPage)
+export default graphql(dropCash,{name:'dropCash',options:{fetchPolicy:'cache-and-network'}})(CashPage)

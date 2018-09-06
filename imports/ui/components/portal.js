@@ -8,12 +8,11 @@ const Container = styled.div`
     display:grid;
     margin:auto;
     width:30vw;
-    
+
   background: #0cebeb; /* fallback for old browsers */
   background: -webkit-linear-gradient(to top, #0cebeb, #20e3b2, #29ffc6); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to top, #0cebeb, #20e3b2, #29ffc6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 
     padding: 3em;
     grid-gap:3em;
@@ -87,8 +86,6 @@ class Portal extends Component {
 
     render() {
 
-
-        console.log(Accounts.users );
         const {newuser,err} = this.state
         return (
             <Container >

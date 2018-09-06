@@ -21,6 +21,7 @@ const GetUsers = gql`
   users{
     _id
 		name
+    phone
   }
 }
 `;
@@ -47,7 +48,7 @@ class calculator extends Component {
       return (
         <div className="animated calculator ">
           {users.map((user) => (
-            <UserCashInput {...this.props} key={user._id} _id={user._id} name={user.name} />
+            <UserCashInput {...this.props} key={user._id} _id={user._id} phone={user.phone} name={user.name} />
           ))}
         </div>
       );
@@ -98,11 +99,10 @@ class UserCashInput extends Component {
 
   confirm() {
     const { time, cash, shift } = this.state;
-    const { name,_id } = this.props;
-
+    const { name,_id,phone } = this.props;
     // Add user to cashpage data
 
-    let data = [{ time, name, cash,shift,_id }];
+    let data = [{ time, name, cash,shift,_id ,phone}];
     this.props.handleCashData(data);
 
       // Activate Drop Button  locked to true will show button
@@ -160,8 +160,7 @@ const UserToolTip = ({ hours, tooltip, confirm }) => {
                 grid-area: tooltip;
                 display:grid;
                 grid-template:'hours' 'confirm';
-                justify-content:center
-              
+                justify-content:center;
         `;
 
   const StyledHours = styled.div`

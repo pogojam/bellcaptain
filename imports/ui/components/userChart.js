@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component,Fragment } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import {  graphql } from 'react-apollo'
 import gql from '../../../node_modules/graphql-tag';
@@ -19,9 +19,82 @@ class UserChart extends Component {
     componentDidMount(){
        
     }
+
+    InitChart(){
+
+        const limit = this.props.data.variables.limit
+        const chartType = this.props.type
+        let lookback = null
+        
+        let cashDrops = []
+        let dates = []
+        const data = this.props.data.userDrops
+
+        data.map(drops=>{
+        cashDrops.push(drops.cashBack) 
+        dates.push(drops.date)
+        })
+
+        return  {
+            title : {
+                text: `${chartType} Last ${limit} Days`,
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['最高气温','最低气温']
+            },
+            toolbox: {
+                show : true
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data :dates
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel : {
+                        formatter: '{value} $'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'Drop',
+                    type:'line',
+                    data:cashDrops,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: 'Best Day'},
+                            {type : 'min', name: 'Worst Day'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: 'avarage $'}
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+
+
     render() {
+
+      
+
         return (
-            <ReactEcharts option={chartOptions} />
+            <Fragment>
+                {this.props.data.loading?null:<ReactEcharts theme={'captainTheme'} option={this.InitChart()} />}
+            </Fragment>
         );
     }
 }
@@ -48,6 +121,5 @@ const chartOptions = {
 
 
 export default graphql(query,{options:({limit})=>{
-    console.log(limit);
-    return {variables:{limit:limit}}
+    return {variables:{limit:limit},options:{fetchPolicy:'network-only'}}
 }})(UserChart)
