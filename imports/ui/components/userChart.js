@@ -43,9 +43,7 @@ class UserChart extends Component {
             tooltip : {
                 trigger: 'axis'
             },
-            legend: {
-                data:['最高气温','最低气温']
-            },
+          
             toolbox: {
                 show : true
             },
