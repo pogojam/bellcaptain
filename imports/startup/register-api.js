@@ -19,7 +19,7 @@ const schema = makeExecutableSchema({
 
 createApolloServer({
     schema,
-    cors:false
+    cors:true
 })
 
 console.log('Server Up')
