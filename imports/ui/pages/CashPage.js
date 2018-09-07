@@ -282,7 +282,7 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
 
       <StyledTotals>
    
-      <ReactEcharts theme={'captainTheme'} style={{ height:'30vh' }} option={totalsChartOptions} />
+      <ReactEcharts theme={'captainTheme'} style={{ height:'30vh',margin:'2em' }} option={totalsChartOptions} />
       </StyledTotals>
 
       {data.map((user, id) => (
