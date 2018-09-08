@@ -43,7 +43,7 @@ class calculator extends Component {
     const { TotalCuts, TotalCash } = this.state;
     const users = this.props.data.users;
     if (this.props.data.loading) {
-      return <div />;
+      return<div className="lds-ripple"><div></div><div></div></div>;
     } else {
       return (
         <div className="animated calculator ">

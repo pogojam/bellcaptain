@@ -15,6 +15,6 @@ export default sendSMS= (msg,phone)=>{
         from: '+19286123179',       
         to: phone 
     }) 
-    .then(message => console.log(message.sid)) 
+    .then(message => console.log(`SMS Sent to ${phone}` )) 
     .done();
 }

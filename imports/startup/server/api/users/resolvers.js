@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { GraphQLScalarType } from 'graphql';
-
+import RunningTotals from '../../RunningTotals'
 
 
 
@@ -38,7 +38,7 @@ export default {
          updateUser(obj,{name,email,phone},{user}){
              Meteor.users.update({_id:user._id},{$set:{emails:[{address:email}],profile:{name:name,phone:phone}}})
              data = Meteor.users.find({_id:user._id}).fetch()
-             console.log(data.profile)  
+
              return   data[1]    
          }
      },
@@ -54,6 +54,16 @@ export default {
         },
         phone(obj,arg,{user}){
             return user.profile.phone
-        }
+        },
+        lifetotaldrop(obj,arg,{user}){
+         tdrop = RunningTotals.find({userId:user._id}).fetch()
+         console.log(tdrop)
+         return tdrop[0].LifeTotalDrop
+        },
+        lifetotalcashback(obj,arg,{user}){
+            tdrop = RunningTotals.find({userId:user._id}).fetch()
+            console.log(tdrop)
+            return tdrop[0].LifeTotalCashBack
+           }
     }
 }

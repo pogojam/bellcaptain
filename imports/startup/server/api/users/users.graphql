@@ -13,5 +13,7 @@ type User{
     loggedIn:Boolean
     name:String
     phone:ID
+    lifetotaldrop:Int
+    lifetotalcashback:Int
 }
 

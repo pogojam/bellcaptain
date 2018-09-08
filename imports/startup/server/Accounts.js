@@ -9,7 +9,7 @@ Accounts.validateNewUser(user=>{
 
         if(userKey===Token){
             return true
-            console.log(user);
+            console.log('New User Validated');
         }
         else{
             throw new Meteor.Error(420, 'Must have a Valid key to make an Account');

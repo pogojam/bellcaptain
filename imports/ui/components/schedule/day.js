@@ -3,7 +3,6 @@ import React, { Component } from 'react'
  class Day extends Component {
   render() {
       const {date,names} = this.props
-      console.log(names)
     return (
          <div>
             {date}

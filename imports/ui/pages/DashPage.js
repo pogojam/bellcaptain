@@ -23,14 +23,14 @@ const GetUser = gql`
 `
 
 
-// Page Comonent
+// Page Compnent
 
 class DashPage extends Component {
 
     render() {
         return (
             <Fragment>
-                {!this.props.data.loading &&<Content {...this.props.data} />}
+                {this.props.data.loading?<div className="lds-ripple"><div></div><div></div></div> :<Content {...this.props.data} />}
             </Fragment>
         );
     }
@@ -82,6 +82,10 @@ const SideBar = ({ refetch,email,name,phone})=>{
 
 
 // Charts
+
+// Pichart Am/PmShifts  CashDropGod Lowman
+// lifetimehours linechartDrops
+
 
  class Charts extends Component {
      constructor(props) {
