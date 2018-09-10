@@ -4,22 +4,20 @@
     margin: 0;
     font-family: 'Marvel', sans-serif;
 }
-.calculator{
-    background-color: aliceblue;
-    padding: 1em;
-    transition: all .2s linear;
-    align-items: center;
-    border-top-right-radius: 16px;
-    
-    text-transform: uppercase;
+
+html{
+    height: 100%
 }
 
+body{
+    height: 100%;
+}
 
 #App{
-    width:100vw;
+
     align-content: center;
     background-color:#78ffd6;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     background: #a8ff78;  /* fallback for old browsers */
@@ -102,3 +100,18 @@ button{
     }
   }
   
+
+  /* Calculator Page */
+
+  .calculator{
+    background-color: aliceblue;
+    padding: 1em;
+    transition: all .2s linear;
+    align-items: center;
+    border-top-right-radius: 16px;
+    
+    text-transform: uppercase;
+}
+
+
+
