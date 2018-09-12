@@ -130,7 +130,7 @@ class CashPage extends Component {
           .bind(this)}
           handleCashDrop={this.handleCashDrop.bind(this)}
           {...this.props}/>
-        <UserTooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}  toggleConfirm={this.toggleConfirm.bind(this)} />
+        <Tooltip totalAM={totalAM} totalPM={totalPM} totalCash={totalCash} data={this.state.data}  toggleConfirm={this.toggleConfirm.bind(this)} />
         {confirm===true&& <Confirm {...this.state} toggleConfirm={this.toggleConfirm.bind(this)}  handleCashDrop={this.handleCashDrop.bind(this)} />}
       </Page>
     )
@@ -209,7 +209,7 @@ const Confirm= (props)=>{
 
 
 
-const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
+const Tooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
 
   let cash = totalCash.toString()
  
@@ -279,11 +279,9 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
   // Content
   return (
     <StyledTooltip >
-
-      <StyledTotals>
    
-      <ReactEcharts theme={'captainTheme'} style={{ height:'30vh',margin:'2em' }} option={totalsChartOptions} />
-      </StyledTotals>
+      <ReactEcharts theme={'captainTheme'} style={{ width:'200px' }} option={totalsChartOptions} />
+
 
       {data.map((user, id) => (
         <StyledInfo className="animated fadeIn fadeInRight" key={id}>
@@ -301,11 +299,15 @@ const UserTooltip = ({totalAM,totalPM,data, totalCash,toggleConfirm}) => {
 }
 
 
-// Styles
+// STYLES
+   
+
+// Confirm Model
 
 const StyledConfirm = styled.div`
-      align-content: center;
+    align-content: center;
     justify-content: center;
+    top:0;
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -322,7 +324,6 @@ const StyledConfirm = styled.div`
     background: aquamarine;
     height: 60vh;
     padding: 2em;
-    position: absolute;
     justify-self: center;
 
           
@@ -341,27 +342,31 @@ const StyledConfirm = styled.div`
       }
 
 `
-
+// Tooltip Styles 
 
 const StyledButton = styled.button`
 background-color:rgba(41,52,65,1);
     color: #87f7cf;
       min-height:10vh;
       font-size:1.5em;
+      margin-top:auto;
 &:hover{
   
 }
 `
 const StyledTooltip = styled.div `
-display:grid;
-height:100%;
+display:flex;
+flex-direction:column;
+width:200px;
+
 text-align: center;
 transition:all 1s linear;
 `
 const StyledInfo = styled.div `
-
 align-self: center;
-margin-left: 2em;
+margin-top:2em;
+align-self:flex-end;
+width:70%;
 font-size: 0.7em;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -371,20 +376,15 @@ font-size: 0.7em;
 padding: .3em;
 
 `
-const StyledTotals = styled.div `
-margin:1em;
-min-width: 15vw;
-`
+
+// Calulator Page Styles
+
 const Page = styled.div `
-       display:grid;
-       grid-template-columns: 10fr 1fr;
-       height:100%
+     @media (min-width:600px){
+      flex: 1;
+    display: flex;
+     }
 }
 `
-
-const Header = styled.div `
-      grid-column: 1/4;
-`
-
 
 export default graphql(dropCash,{name:'dropCash',options:{fetchPolicy:'cache-and-network'}})(CashPage)

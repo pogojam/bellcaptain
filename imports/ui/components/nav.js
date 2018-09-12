@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component,Fragment } from "react";
 import { withRouter } from "react-router";
+import styled from "styled-components";
+import Toggle from "./toggle";
 
 // Styled components 
 const Container = styled.div`
@@ -10,7 +11,8 @@ const Container = styled.div`
     grid-area:'nav';
     padding: 1em;
     background:none;
-
+  
+    
 
   button{
     color:#2d2f31;
@@ -25,6 +27,12 @@ const Container = styled.div`
     &:hover{
         transform:translateY(3px);
     }
+
+  @media (max-width:600px) {
+        display:none;     
+      }
+
+
   }
   svg{
     width:10vw;
@@ -34,8 +42,11 @@ const Container = styled.div`
   }
 `;
 
-// pages without nav
-
+const SideNavContainer = styled.div`
+    position:absolute;
+    top:0;
+    height:100%
+`
 
 
 // Components 
@@ -48,14 +59,37 @@ const Nav = ({ history, logo, pages }) => {
       {logo ? <img src={logo} /> : <Captain />}
       <button onClick={()=>{Meteor.logout(),history.push('/')}} >Logout</button>
       {pages.map((page,id)=>{
-
           if(!(location===page.route)){
-            return <button key={id} onClick={()=>{history.push(page.route)}} >{page.name}</button>
+            return <button key={id} onClick={()=>{history.push(page.route)}} > <a > {page.name} </a> </button>
           }
       })}
+      <Toggle>
+      {({on,toggle})=>(
+        <Fragment>
+     <Burger onClick={toggle} />
+       { on?<SideNav/>:null}
+        </Fragment>
+      )}
+      </Toggle>
     </Container>
   );
 };
+
+
+const Burger = ()=>(<div className="burger" >
+  <div className="bar1"/>
+  <div className="bar2"/>
+  <div className="bar3"/>
+</div>)
+
+const SideNav = () => {
+  return <SideNavContainer>
+      {sdfds}
+
+  </SideNavContainer>
+}
+
+
 
 const Captain = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
