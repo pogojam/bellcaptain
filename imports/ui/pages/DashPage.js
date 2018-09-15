@@ -1,13 +1,12 @@
 import React, { Component,Fragment } from 'react';
-import Nav from "../components/nav";
 import styled from '../../../node_modules/styled-components';
-import ReactEcharts from 'echarts-for-react';
 import {  graphql } from 'react-apollo'
 import Chart from "../components/userChart";
+import ShiftPieChart from "../components/userPieChart";
 import gql from '../../../node_modules/graphql-tag';
 import Toggle from '../components/toggle'
 import ProfileChange from '../components/profileChange'
-import { inherits } from 'util';
+
 
 // GraphQL Calls 
 
@@ -18,6 +17,7 @@ const GetUser = gql`
             email
             name
             phone
+            
         }
     }
 `
@@ -45,6 +45,7 @@ class Content extends Component {
             <SideBar refetch={this.props.refetch} {...user} />
             <ChartWrapper>
                 <Charts type={'Cash Back'} lookback={'week'} />
+                <ShiftPieChart/>
             </ChartWrapper>
             </StyledContent>
         );
@@ -125,7 +126,7 @@ const SideBar = ({ refetch,email,name,phone})=>{
 // Styles
 
 const ChartWrapper = styled.div`
-display:grid;
+
     &>*{
         margin:1em;
     }

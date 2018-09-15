@@ -13,7 +13,12 @@ type User{
     loggedIn:Boolean
     name:String
     phone:ID
-    lifetotaldrop:Int
-    lifetotalcashback:Int
+    Totals:Totals
 }
 
+type Totals {
+    lifetotaldrop:Int
+    lifetotalcashback:Int
+    AMshift:Int
+    PMshift:Int
+}

@@ -55,15 +55,20 @@ export default {
         phone(obj,arg,{user}){
             return user.profile.phone
         },
-        lifetotaldrop(obj,arg,{user}){
-         tdrop = RunningTotals.find({userId:user._id}).fetch()
-         console.log(tdrop)
-         return tdrop[0].LifeTotalDrop
+        Totals(obj,arg,{user}){
+            totals = RunningTotals.find({userId:user._id}).fetch()
+            console.log(totals)
+                return totals[0] 
         },
-        lifetotalcashback(obj,arg,{user}){
-            tdrop = RunningTotals.find({userId:user._id}).fetch()
-            console.log(tdrop)
-            return tdrop[0].LifeTotalCashBack
-           }
+        // lifetotaldrop(obj,arg,{user}){
+        //  tdrop = RunningTotals.find({userId:user._id}).fetch()
+        //  console.log(tdrop)
+        //  return tdrop[0].LifeTotalDrop
+        // },
+        // lifetotalcashback(obj,arg,{user}){
+        //     tdrop = RunningTotals.find({userId:user._id}).fetch()
+        //     console.log(tdrop)
+        //     return tdrop[0].LifeTotalCashBack
+        //    }
     }
 }

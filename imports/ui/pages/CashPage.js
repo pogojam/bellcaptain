@@ -347,9 +347,16 @@ const StyledConfirm = styled.div`
 const StyledButton = styled.button`
 background-color:rgba(41,52,65,1);
     color: #87f7cf;
-      min-height:10vh;
       font-size:1.5em;
+      min-height:10vh;
       margin-top:auto;
+      @media (max-width:600px) {
+        width:100%;
+        margin: 0;
+        color: rgba(41,52,65,1);
+        background-color:#87f7cf;
+      }
+
 &:hover{
   
 }
@@ -357,23 +364,40 @@ background-color:rgba(41,52,65,1);
 const StyledTooltip = styled.div `
 display:flex;
 flex-direction:column;
+flex-wrap:wrap;
 width:200px;
-
 text-align: center;
 transition:all 1s linear;
+@media (max-width:600px) {
+  ${'' /* div:nth-child(1){
+    display:none;
+  } */}
+
+  .echarts-for-react {
+    display:none
+  }
+
+  width: 100%;
+    position: fixed;
+    background-color: rgba(41,52,65,1);
+    bottom: 0;
+    flex-direction:row;
 `
 const StyledInfo = styled.div `
 align-self: center;
 margin-top:2em;
 align-self:flex-end;
-width:70%;
 font-size: 0.7em;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    text-align:center;
-    background-color:rgba(41,52,65,1);
-    color: #87f7cf;
+border-top-left-radius: 6px;
+border-bottom-left-radius: 6px;
+text-align:center;
+background-color:rgba(41,52,65,1);
+color: #87f7cf;
 padding: .3em;
+
+@media (min-width:600px){
+  width:70%;
+}
 
 `
 

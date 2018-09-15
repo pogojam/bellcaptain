@@ -18,7 +18,7 @@ export default {
             // Send Text Alert
             sendSMS(smsString,data.phone)
             // update running totals
-            handleRunningTotals(data.userId,data.userDrop,data.cashBack)
+            handleRunningTotals(data.userId,data.userDrop,data.cashBack,data.shift)
             console.log(data)
             return data._id
         }
@@ -26,12 +26,20 @@ export default {
 }
 
 
-const handleRunningTotals = (userId,cashDrop,cashBack)=>{
+const handleRunningTotals = (userId,cashDrop,cashBack,shift)=>{
+
+    let AMshift = 0
+    let PMshift = 0
+    
+    shift==='AM'?AMshift = 1:null
+    shift==='PM'?PMshift = 1:null
 
     RunningTotals.update({userId:userId},{
         $inc:{
             LifeTotalDrop:cashDrop,
             LifeTotalCashBack:cashBack,
+            AMshift:AMshift,
+            PMshift:PMshift
         }
     },
     {

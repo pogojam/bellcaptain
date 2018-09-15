@@ -1,7 +1,6 @@
-import React, {Component, Fragment} from "react";
-import {withRouter} from "react-router";
+import React, {Component} from "react";
 import styled,{keyframes} from "styled-components";
-import Toggle from "./toggle";
+
 
 
 
@@ -20,27 +19,6 @@ const Container = styled.div `
     grid-area:'nav';
     padding: 1em;
     background:none;
-  
-  /* button{
-    color:#2d2f31;
-    font-size:1.6em;
-    background:none;
-    box-shadow:none;
-    transition: all 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    margin-right:2em;
-    &:focus{
-      outline: none
-    }
-    &:hover{
-        transform:translateY(3px);
-    }
-
-  @media (max-width:600px) {
-        display:none;     
-      }
-
-
-  } */
 
   svg{
     width:10vw;
@@ -74,13 +52,17 @@ const SideNavContainer = styled.div `
     position:absolute;
     top: 0;
     left:${({active})=>active?'0%':'-46%'};
-    height: 100%;
+    height: 100vh;
     width: 45%;
     background-color: rgba(41,52,65,1);
     z-index: 99;
     box-shadow: rgba(0,0,0,0.12) 0px 1px 3px, rgba(0, 0, 4, 1) 0px 1px 1px;
     transition: all .4s linear;
-    padding-top: 2em;
+
+    button:nth-child(1){
+        padding-top:2em;
+      }
+
 `;
 
 const Bar = styled.div`
@@ -203,6 +185,13 @@ const SideNav = ({active,pages,history,handleSideNav}) => {
             </Button >
           }
         })}
+
+        <Button
+          sideNav
+          onClick={() => {
+          Meteor.logout(),
+          history.push('/')
+        }}>Logout</Button>
 
   </SideNavContainer>
 }
