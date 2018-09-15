@@ -17,8 +17,8 @@ type User{
 }
 
 type Totals {
-    lifetotaldrop:Int
-    lifetotalcashback:Int
+    LifeTotalDrop:Int
+    LifeTotalCashBack:Int
     AMshift:Int
     PMshift:Int
 }

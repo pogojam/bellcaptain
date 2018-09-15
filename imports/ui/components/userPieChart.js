@@ -16,11 +16,11 @@ const getShift = gql`{
 
 class UserPieChart extends Component {
     render() {
-        const {loading,AMshift,PMshift} = this.props.data
-        const totalShifts = AMshift+PMshift
+        const {loading} = this.props.data
+
         return (
             <Fragment>
-                {loading?null:<PieChart AMshift={AMshift} PMshift={PMshift} totalShifts={totalShifts} />}            
+                {loading?null:<PieChart  data={this.props.data.user.Totals} />}
             </Fragment>
         );
     }
@@ -28,10 +28,13 @@ class UserPieChart extends Component {
 
 
 
-const PieChart = ({AMshift,PMshift,totalShifts}) => {
+const PieChart = ({data}) => {
+
+        const {AMshift,PMshift} = data
+    const totalShifts = AMshift+PMshift
+
 
     const chartOptions={
-    
         series: [
           {
             type:'pie',
@@ -54,10 +57,7 @@ const PieChart = ({AMshift,PMshift,totalShifts}) => {
                 normal: {
                     show: false
                 }
-            },
-            data:[
-                {value:totalShifts, name:`Total $${totalShifts}`},
-            ]
+            }
         },
             {
                 name:'Shift Totals',
@@ -66,7 +66,7 @@ const PieChart = ({AMshift,PMshift,totalShifts}) => {
                 avoidLabelOverlap: true,
                 label: {
                     normal: {
-                        show: false,
+                        show: true,
                         position: 'center'
                     },
                     emphasis: {
@@ -79,8 +79,8 @@ const PieChart = ({AMshift,PMshift,totalShifts}) => {
                 },
               
                 data:[
-                    {value:AMshift, name:`AM $${AMshift}`},
-                    {value:PMshift, name:`PM $${PMshift}`}
+                    {value:AMshift, name:`AM ${AMshift}`},
+                    {value:PMshift, name:`PM ${PMshift}`}
                 ]
             }
         ]

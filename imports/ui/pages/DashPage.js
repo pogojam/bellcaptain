@@ -6,7 +6,7 @@ import ShiftPieChart from "../components/userPieChart";
 import gql from '../../../node_modules/graphql-tag';
 import Toggle from '../components/toggle'
 import ProfileChange from '../components/profileChange'
-
+import Totals from "../components/totals";
 
 // GraphQL Calls 
 
@@ -46,6 +46,8 @@ class Content extends Component {
             <ChartWrapper>
                 <Charts type={'Cash Back'} lookback={'week'} />
                 <ShiftPieChart/>
+                <Totals type={'Cashback'} />
+
             </ChartWrapper>
             </StyledContent>
         );
@@ -126,9 +128,12 @@ const SideBar = ({ refetch,email,name,phone})=>{
 // Styles
 
 const ChartWrapper = styled.div`
-
+    
     &>*{
         margin:1em;
+        border-radius:16px;
+        background-color: rgba(41,52,65,1);
+        overflow: hidden;
     }
 `
 
