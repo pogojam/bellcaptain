@@ -31,9 +31,14 @@ class Totals extends Component {
 
 const Content = (props) => {
 
-    
 
-   const value = props.values.Totals.LifeTotalDrop;
+
+   let value = null;
+
+        props.type === 'Cashback' ? value = props.values.Totals.LifeTotalDrop :null
+        props.type === 'Drop' ? value = props.values.Totals.LifeTotalCashBack :null
+
+        console.log(props);
 
         return <Wrapper>
     <h2>${value}</h2>
@@ -44,6 +49,7 @@ const Content = (props) => {
 const Wrapper = styled.div`
         color:aquamarine;
         padding:1em;
+        text-align:center;
 `
 
 export default graphql(getTotals)(Totals);

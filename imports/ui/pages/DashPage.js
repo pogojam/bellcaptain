@@ -47,7 +47,7 @@ class Content extends Component {
                 <Charts type={'Cash Back'} lookback={'week'} />
                 <ShiftPieChart/>
                 <Totals type={'Cashback'} />
-
+                <Totals type={'Drop'} />
             </ChartWrapper>
             </StyledContent>
         );

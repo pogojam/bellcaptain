@@ -29,11 +29,12 @@ class UserPieChart extends Component {
 
 
 const PieChart = ({data}) => {
+    
+        if(data===null){
+            return null
+        }
 
-        const {AMshift,PMshift} = data
-    const totalShifts = AMshift+PMshift
-
-
+    const {AMshift,PMshift} = data
     const chartOptions={
         series: [
           {
