@@ -165,22 +165,25 @@ const StyledChart = styled.div`
 const StyledContent =  styled.div`
         display:grid;
         height:100%;
+
+        @media(min-width:600px){
         grid-template-columns:minmax(105px,160px) 3fr;
+        }
 `
 
 
 const StyledSideBar = styled.div`
     background-color: rgba(41,52,65,1);
     display: grid;
-    grid-template-rows: 2fr repeat(7,1fr);
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+
     margin-top: 10px;
     grid-gap:10px;
     max-height: 80vh;
 
-    @media(max-height:600px){
-        display:none;
+    @media(min-width:600px){
+        grid-template-rows: 2fr repeat(7,1fr);
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
     }
 
     ul{

@@ -1,4 +1,4 @@
-import './components/app.css'
+import './app.css'
 import 'animate.css'
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Switch, Route,Router } from 'react-router'

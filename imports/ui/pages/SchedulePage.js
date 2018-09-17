@@ -4,8 +4,8 @@ import Week from '../components/schedule/week'
 class SchedulePage extends Component {
     render() {
         return (
-            <div>
-                <Week/>
+            <div style={{ display:'grid' }} >
+                <h2 style={{     justifySelf: 'center' }}  >Comming Soon</h2>
             </div>
         );
     }
