@@ -411,4 +411,7 @@ const Page = styled.div `
 }
 `
 
-export default graphql(dropCash,{name:'dropCash',options:{fetchPolicy:'cache-and-network'}})(CashPage)
+export default graphql(dropCash,{name:'dropCash',options:{
+  fetchPolicy:'cache-and-network',
+  refetchQueries:["LifeTotals","userDrops","Totals"]
+  }})(CashPage)

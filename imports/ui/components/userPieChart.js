@@ -3,7 +3,8 @@ import {  graphql } from 'react-apollo'
 import gql from '../../../node_modules/graphql-tag';
 import ReactEcharts from 'echarts-for-react';
 
-const getShift = gql`{
+const getShift = gql`
+query Shifts {
     user{
         _id
       Totals{
@@ -17,7 +18,7 @@ const getShift = gql`{
 class UserPieChart extends Component {
     render() {
         const {loading} = this.props.data
-
+            if(this.props.data.user === null){return null}
         return (
             <Fragment>
                 {loading?null:<PieChart  data={this.props.data.user.Totals} />}
@@ -34,7 +35,9 @@ const PieChart = ({data}) => {
             return null
         }
 
-    const {AMshift,PMshift} = data
+    let {AMshift,PMshift} = data
+
+
     const chartOptions={
         series: [
           {
@@ -93,4 +96,4 @@ return   <ReactEcharts style={{ height:'500px' }}   option={chartOptions} theme=
 
 
 
-export default graphql(getShift)(UserPieChart)
+export default graphql(getShift,{options:{fetchPolicy:'network-only'}})(UserPieChart)

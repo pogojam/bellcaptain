@@ -57,7 +57,12 @@ export default {
         },
         Totals(obj,arg,{user}){
             totals = RunningTotals.find({userId:user._id}).fetch()
-            console.log(totals)
+             if(totals.length===0){
+                 return{ 
+                     LifeTotalDrop:0,
+                     LifeTotalCashBack:0
+                 }
+             }
                 return totals[0] 
         },
         // lifetotaldrop(obj,arg,{user}){
