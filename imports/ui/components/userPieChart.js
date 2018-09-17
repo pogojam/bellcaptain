@@ -87,7 +87,7 @@ const PieChart = ({data}) => {
         ]
     }
     
-return   <ReactEcharts option={chartOptions} theme={'captainTheme'} />
+return   <ReactEcharts style={{ height:'500px' }}   option={chartOptions} theme={'captainTheme'} />
 }    
 
 

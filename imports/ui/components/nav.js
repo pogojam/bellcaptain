@@ -123,6 +123,9 @@ class Nav extends Component {
         }}>Logout</Button>
         {pages.map((page, id) => {
           if (!(location === page.route)) {
+              if(page.name==='Home'){
+                  return
+              }
             return <Button
               key={id}
               onClick={() => {

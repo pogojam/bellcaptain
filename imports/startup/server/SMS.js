@@ -1,6 +1,6 @@
 import twilio from "twilio";
-const accountSid = 'ACad678d8906a6419e29511e79cede8445'; 
-const authToken = 'c3af41ba0f6b50fbcf65445311640c5b'; 
+const accountSid = Meteor.settings.twilow.t_sid;
+const authToken = Meteor.settings.twilow.t_token; 
 
 
 

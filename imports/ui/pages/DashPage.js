@@ -110,14 +110,14 @@ const SideBar = ({ refetch,email,name,phone})=>{
 
     const {lookback} = this.state
 
-    return <StyledCharts >
+    return <StyledChart >
     <Chart type={this.props.type} limit={lookback} />
     <select value={this.state.value} onChange={this.handleLookback.bind(this)} >
         <option  value={7} >Week</option>
         <option value={30} >Month</option>
         <option value={365} >Year</option>
     </select>
-    </StyledCharts>
+    </StyledChart>
   }
 }
 
@@ -128,16 +128,35 @@ const SideBar = ({ refetch,email,name,phone})=>{
 // Styles
 
 const ChartWrapper = styled.div`
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr );
+    grid-template-columns: repeat(3, 1fr);
+
+    
     
     &>*{
         margin:1em;
         border-radius:16px;
         background-color: rgba(41,52,65,1);
         overflow: hidden;
+
+        @media(min-width:600px){
+            &:nth-child(1){
+            grid-column:1/3;
+        }
+        }
+        
+
+           @media(max-width:600px){
+            grid-column:1/4;
+
+        }
+        
     }
 `
 
-const StyledCharts = styled.div`
+const StyledChart = styled.div`
             padding: 1em;
             background-color:rgba(41,52,65,1);
             border-radius:16px;
@@ -160,6 +179,10 @@ const StyledSideBar = styled.div`
     grid-gap:10px;
     max-height: 80vh;
 
+    @media(max-height:600px){
+        display:none;
+    }
+
     ul{
         padding-left:10px;
     }
@@ -171,6 +194,8 @@ const StyledSideBar = styled.div`
         list-style:none;
         display:grid;
         justify-content:center;
+        
+     
     }
 }
 

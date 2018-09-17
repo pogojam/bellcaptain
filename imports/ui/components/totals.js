@@ -50,6 +50,7 @@ const Wrapper = styled.div`
         color:aquamarine;
         padding:1em;
         text-align:center;
+
 `
 
 export default graphql(getTotals)(Totals);
