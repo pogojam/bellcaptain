@@ -2,17 +2,17 @@
   "name": "bellcaptain",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --settings settings-development.json"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.2.0",
     "animate.css": "^3.7.0",
     "apollo-boost": "^0.1.13",
     "apollo-client": "^2.3.5",
     "apollo-client-preset": "^1.0.8",
     "apollo-link": "^1.2.2",
     "apollo-server-core": "^1.4.0",
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "core-js": "^2.5.7",
     "dom-helpers": "^3.3.1",
