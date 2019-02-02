@@ -20,7 +20,7 @@ class Home extends Component {
           <Welcome redirect={this.redirect.bind(this)} />
         ) : (
           <Portal
-            logo="https://image.flaticon.com/icons/svg/87/87746.svg"
+            logo="https://res.cloudinary.com/dxjse9tsv/image/upload/v1549066983/piggy-bank.png"
             redirect={this.redirect.bind(this)}
           />
         )}

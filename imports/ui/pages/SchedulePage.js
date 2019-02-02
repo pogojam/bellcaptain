@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Week from '../components/schedule/week'
+import withAuthentication from '../components/withAuthentication'
 
 class SchedulePage extends Component {
     render() {
@@ -11,4 +12,4 @@ class SchedulePage extends Component {
     }
 }
 
-export default SchedulePage;
+export default withAuthentication()(SchedulePage);

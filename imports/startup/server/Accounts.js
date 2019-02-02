@@ -3,7 +3,9 @@
 
 Accounts.validateNewUser(user=>{
         
-
+if(Meter.isDevelopment){
+    return true
+}
         const Token = '91837!'
         const userKey = user.profile.key
 

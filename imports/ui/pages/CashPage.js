@@ -7,6 +7,7 @@ import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import milToStandard from '../tools/milToStandard'
 import graphTheme from "../themes/graphThemes";
+import withAuthentication from '../components/withAuthentication'
 
 echarts.registerTheme('captainTheme',graphTheme)
 
@@ -414,4 +415,4 @@ const Page = styled.div `
 export default graphql(dropCash,{name:'dropCash',options:{
   fetchPolicy:'cache-and-network',
   refetchQueries:["LifeTotals","userDrops","Totals"]
-  }})(CashPage)
+  }})(withAuthentication()(CashPage))

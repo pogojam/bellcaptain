@@ -31,7 +31,7 @@ const Button = styled.p`
     }
 `
 
-const Logo = ({path})=>(<img  src={path} alt=""/>)
+const Logo = ({path})=>(<img style={{margin:'auto'}}  src={path} alt=""/>)
 
 
 class Portal extends Component {

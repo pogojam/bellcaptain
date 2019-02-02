@@ -7,6 +7,8 @@ import gql from '../../../node_modules/graphql-tag';
 import Toggle from '../components/toggle'
 import ProfileChange from '../components/profileChange'
 import Totals from "../components/totals";
+import withAuthentication from '../components/withAuthentication'
+import {Redirect} from 'react-router'
 
 // GraphQL Calls 
 
@@ -26,20 +28,17 @@ const GetUser = gql`
 // Page Compnent
 
 class DashPage extends Component {
-
     render() {
-        return (
-            <Fragment>
+        const {user} = this.props
+        return      <Fragment>
                 {this.props.data.loading?<div className="lds-ripple"><div></div><div></div></div> :<Content {...this.props.data} />}
             </Fragment>
-        );
     }
 }
 
 class Content extends Component {
     render() {
-        const {user}= this.props
-
+        const {user} = this.props
         return (
             <StyledContent>
             <SideBar refetch={this.props.refetch} {...user} />
@@ -212,4 +211,4 @@ background-color:antiquewhite;
 
 
 
-export default graphql(GetUser,{options:{fetchPolicy:'cache-and-network'}})(DashPage);
+export default graphql(GetUser,{options:{fetchPolicy:'cache-and-network'}})(withAuthentication()(DashPage));

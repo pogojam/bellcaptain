@@ -19,7 +19,6 @@ export default {
             sendSMS(smsString,data.phone)
             // update running totals
             handleRunningTotals(data.userId,data.userDrop,data.cashBack,data.shift)
-            console.log(data)
             return data._id
         }
     }
