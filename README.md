@@ -10,7 +10,7 @@ Platform used to manage  daily  cash distribution for cash related businesses.
 ## Technologies
 Meteor, graphQL , Apollo , React , Twillo
 ## Install
-  `git cloan`
+  `git clone`
   `npm i`
   `npm start`
   To make an account use *91837!* in the key feild.
