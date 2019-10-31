@@ -24,8 +24,6 @@ const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-//dcf
-
 const cache = new InMemoryCache();
 
 const client = new ApolloClient({
