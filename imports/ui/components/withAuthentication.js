@@ -7,6 +7,9 @@ const user = gql`
   {
     user {
       _id
+      name
+      email
+      phone
     }
   }
 `;
@@ -14,28 +17,26 @@ const user = gql`
 const withAuthentication = userRole => Component => {
   class WithAuthentication extends Component {
     render() {
-      const { data, loading ,location } = this.props;
-      const isLoggedIn = data.user;
+      const { data, loading, location } = this.props;
+      const isLoggedIn = data.user ? true : false;
 
-      
-      
+      if (loading) {
+        return (
+          <div className="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+        );
+      }
 
-          if (loading) {
-              return <div className="lds-ripple"><div></div><div></div></div>
-          }
-         
-          if (isLoggedIn) {
-              console.log("user is",isLoggedIn);
-              
-              return <Component {...this.props} {...data} />
-          }
-          else{
-                console.log(location);
-                
-        if(location.pathname === '/'){return <Component {...this.props} {...data} />}
-        return <Redirect to='/' />
-          }
-      
+      if (isLoggedIn) {
+        return <Component {...this.props} {...data} />;
+      } else {
+        if (location.pathname === "/") {
+          return <Component {...this.props} {...data} />;
+        }
+        return <Redirect to="/" />;
+      }
     }
   }
 

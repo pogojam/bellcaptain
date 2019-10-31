@@ -22,55 +22,47 @@ const animations = {
 };
 
 class App extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-      super(props)
-    
-      this.state = {
-         
-      }
-    }
-    
+    this.state = {};
+  }
 
   render() {
-
     return (
       <Route
         render={({ location, history }) => (
           <Fragment>
             <Nav history={history} pages={pages} />
-          
-                <Switch location={location}>
-                  <Route
-                    exact
-                    path={pages[0].route}
-                    children={({ match, ...rest }) =>
-                      match && <Home {...rest} />
-                    }
-                  />
-                  <Route
-                    exact
-                    path={pages[1].route}
-                    children={({ match, ...rest }) =>
-                      match && <CashPage {...rest} />
-                    }
-                  />
-                  <Route
-                    exact
-                    path={pages[2].route}
-                    children={({ match, ...rest }) =>
-                      match && <DashPage {...rest} />
-                    }
-                  />
-                  <Route
-                    exact
-                    path={pages[3].route}
-                    children={({ match, ...rest }) =>
-                      match && <SchedulePage {...rest} />
-                    }
-                  />
-                </Switch>
-       
+
+            <Switch location={location}>
+              <Route
+                exact
+                path={pages[0].route}
+                children={({ match, ...rest }) => match && <Home {...rest} />}
+              />
+              <Route
+                exact
+                path={pages[1].route}
+                children={({ match, ...rest }) =>
+                  match && <CashPage {...rest} />
+                }
+              />
+              <Route
+                exact
+                path={pages[2].route}
+                children={({ match, ...rest }) =>
+                  match && <DashPage {...rest} />
+                }
+              />
+              <Route
+                exact
+                path={pages[3].route}
+                children={({ match, ...rest }) =>
+                  match && <SchedulePage {...rest} />
+                }
+              />
+            </Switch>
           </Fragment>
         )}
       />
