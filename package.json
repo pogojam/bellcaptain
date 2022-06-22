@@ -11,7 +11,7 @@
     "apollo-client": "^2.3.5",
     "apollo-client-preset": "^1.0.8",
     "apollo-link": "^1.2.2",
-    "apollo-server-core": "^1.4.0",
+    "apollo-server-core": "^3.9.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "core-js": "^2.5.7",
