@@ -24,7 +24,7 @@
     "graphql-tag": "^2.9.2",
     "graphql-tools": "^3.0.5",
     "har-schema": "^2.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.17",
     "meteor-node-stubs": "^0.4.1",
     "plivo": "^4.0.2",
     "rc-slider": "^8.6.1",
